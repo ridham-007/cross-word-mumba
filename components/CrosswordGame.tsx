@@ -156,6 +156,27 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       }));
     }
   }, [userProgress, puzzle]);
+
+  // Find the starting cell of a word
+  const findWordStart = (row: number, col: number, direction: 'across' | 'down'): { row: number; col: number } => {
+    if (!puzzle) return { row, col };
+    
+    const { userGrid } = userProgress;
+    
+    if (direction === 'across') {
+      let startCol = col;
+      while (startCol > 0 && !userGrid[row][startCol - 1].isBlack) {
+        startCol--;
+      }
+      return { row, col: startCol };
+    } else {
+      let startRow = row;
+      while (startRow > 0 && !userGrid[startRow - 1][col].isBlack) {
+        startRow--;
+      }
+      return { row: startRow, col };
+    }
+  };
   
   // Handle cell selection
   const handleCellSelect = (row: number, col: number) => {
@@ -172,8 +193,8 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       newDirection = selectedDirection === 'across' ? 'down' : 'across';
     }
     
-    // Update the grid highlighting
-    const newGrid = [...userGrid];
+    // Find the word boundaries and highlight cells
+    const newGrid = JSON.parse(JSON.stringify(userGrid));
     
     // Clear previous highlights
     for (let i = 0; i < newGrid.length; i++) {
@@ -182,36 +203,21 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       }
     }
     
+    // Find the start of the word
+    const wordStart = findWordStart(row, col, newDirection);
+    
     // Highlight the word
     if (newDirection === 'across') {
-      // Highlight the row
-      let startCol = col;
-      while (startCol > 0 && !newGrid[row][startCol - 1].isBlack) {
-        startCol--;
-      }
-      
-      let endCol = col;
-      while (endCol < newGrid[0].length - 1 && !newGrid[row][endCol + 1].isBlack) {
-        endCol++;
-      }
-      
-      for (let j = startCol; j <= endCol; j++) {
-        newGrid[row][j].isHighlighted = true;
+      let currentCol = wordStart.col;
+      while (currentCol < newGrid[row].length && !newGrid[row][currentCol].isBlack) {
+        newGrid[row][currentCol].isHighlighted = true;
+        currentCol++;
       }
     } else {
-      // Highlight the column
-      let startRow = row;
-      while (startRow > 0 && !newGrid[startRow - 1][col].isBlack) {
-        startRow--;
-      }
-      
-      let endRow = row;
-      while (endRow < newGrid.length - 1 && !newGrid[endRow + 1][col].isBlack) {
-        endRow++;
-      }
-      
-      for (let i = startRow; i <= endRow; i++) {
-        newGrid[i][col].isHighlighted = true;
+      let currentRow = wordStart.row;
+      while (currentRow < newGrid.length && !newGrid[currentRow][col].isBlack) {
+        newGrid[currentRow][col].isHighlighted = true;
+        currentRow++;
       }
     }
     
@@ -370,6 +376,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   const handleClueSelect = (clue: Clue) => {
     if (!puzzle) return;
     
+    // Find the starting cell of the clue
     handleCellSelect(clue.row, clue.col);
     setUserProgress(prev => ({
       ...prev,
