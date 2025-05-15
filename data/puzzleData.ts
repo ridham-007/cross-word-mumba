@@ -19,17 +19,17 @@ export const puzzles: CrosswordPuzzle[] = [
     clues: {
       across: [
         { number: 1, text: "Domestic feline pet", answer: "CAT", row: 0, col: 0, direction: "across" },
-        { number: 3, text: "Man's best friend", answer: "DOG", row: 0, col: 4, direction: "across" },
-        { number: 5, text: "Howls at the moon", answer: "WOLF", row: 2, col: 0, direction: "across" },
-        { number: 7, text: "Large omnivore that hibernates", answer: "BEAR", row: 4, col: 0, direction: "across" },
-        { number: 8, text: "King of the jungle", answer: "LION", row: 5, col: 4, direction: "across" },
-        { number: 9, text: "Striped big cat", answer: "TIGER", row: 6, col: 0, direction: "across" }
+        { number: 2, text: "Man's best friend", answer: "DOG", row: 0, col: 4, direction: "across" },
+        { number: 3, text: "Howls at the moon", answer: "WOLF", row: 2, col: 0, direction: "across" },
+        { number: 4, text: "Large omnivore that hibernates", answer: "BEAR", row: 4, col: 0, direction: "across" },
+        { number: 5, text: "King of the jungle", answer: "LION", row: 5, col: 4, direction: "across" },
+        { number: 6, text: "Striped big cat", answer: "TIGER", row: 6, col: 0, direction: "across" }
       ],
       down: [
         { number: 1, text: "Produces milk for humans", answer: "COW", row: 0, col: 0, direction: "down" },
-        { number: 2, text: "Long-necked African animal", answer: "GIRAFFE", row: 0, col: 6, direction: "down" },
-        { number: 4, text: "Quacks and swims", answer: "DUCK", row: 0, col: 4, direction: "down" },
-        { number: 6, text: "Large endangered black and white bear", answer: "PANDA", row: 4, col: 5, direction: "down" }
+        { number: 7, text: "Long-necked African animal", answer: "GIRAFFE", row: 0, col: 6, direction: "down" },
+        { number: 2, text: "Quacks and swims", answer: "DUCK", row: 0, col: 4, direction: "down" },
+        { number: 8, text: "Large endangered black and white bear", answer: "PANDA", row: 4, col: 5, direction: "down" }
       ]
     }
   },
@@ -133,36 +133,38 @@ function generateGrid(template: string[][]): any[][] {
   });
   
   const grid: any[][] = [];
+  let numberMap = new Map<string, number>();
+  let currentNumber = 1;
   
+  // First pass: determine cell numbers
+  for (let i = 0; i < normalizedTemplate.length; i++) {
+    for (let j = 0; j < maxLength; j++) {
+      if (normalizedTemplate[i][j] !== "") {
+        const isStartOfAcross = j === 0 || normalizedTemplate[i][j-1] === "";
+        const isStartOfDown = i === 0 || normalizedTemplate[i-1][j] === "";
+        
+        if (isStartOfAcross || isStartOfDown) {
+          numberMap.set(`${i},${j}`, currentNumber++);
+        }
+      }
+    }
+  }
+  
+  // Second pass: create grid with numbers
   for (let i = 0; i < normalizedTemplate.length; i++) {
     grid[i] = [];
     for (let j = 0; j < maxLength; j++) {
-      const cellValue = normalizedTemplate[i][j] || "";
+      const cellValue = normalizedTemplate[i][j];
       grid[i][j] = {
         row: i,
         col: j,
         answer: cellValue,
         isBlack: cellValue === "",
-        number: undefined, // Will be set later
+        number: numberMap.get(`${i},${j}`),
         isRevealed: false,
         userInput: "",
         isHighlighted: false
       };
-    }
-  }
-
-  // Assign numbers to cells
-  let cellNumber = 1;
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[i].length; j++) {
-      if (grid[i][j].isBlack) continue;
-      
-      const isStartOfAcross = j === 0 || (j > 0 && grid[i][j-1].isBlack);
-      const isStartOfDown = i === 0 || (i > 0 && grid[i-1][j].isBlack);
-      
-      if (isStartOfAcross || isStartOfDown) {
-        grid[i][j].number = cellNumber++;
-      }
     }
   }
   
