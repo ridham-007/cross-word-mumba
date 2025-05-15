@@ -35,26 +35,28 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
-      <div className="flex items-center space-x-4">
+    <div className="space-y-8 max-w-4xl mx-auto px-4">
+      <div className="flex flex-wrap items-center gap-4">
         <Button 
           onClick={onBack}
           variant="outline"
           size="icon"
-          className="rounded-full"
+          className="rounded-full shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h1 className="text-3xl font-bold">{puzzle.title}</h1>
-        <Badge className={getDifficultyColor(puzzle.difficulty)}>
-          {puzzle.difficulty}
-        </Badge>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold">{puzzle.title}</h1>
+          <Badge className={getDifficultyColor(puzzle.difficulty)}>
+            {puzzle.difficulty}
+          </Badge>
+        </div>
       </div>
 
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Zap className="h-6 w-6 text-yellow-500" />
+          <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
+            <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-500" />
             Puzzle Details
           </CardTitle>
           <CardDescription>
@@ -65,7 +67,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           <div className="space-y-4">
             <div className="bg-secondary/50 rounded-lg p-4 space-y-3">
               <h3 className="font-semibold">Grid Information</h3>
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-blue-500" />
                   <span>Size: {puzzle.grid.length}x{puzzle.grid[0].length}</span>
@@ -113,37 +115,28 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between pt-6">
+        <CardFooter className="flex flex-col sm:flex-row gap-3 justify-end pt-6">
           <Button
             variant="outline"
-            onClick={onBack}
-            className="w-32"
+            onClick={() => setShowInstructions(true)}
+            className="w-full sm:w-auto flex items-center gap-2"
           >
-            Back to List
+            <HelpCircle className="h-4 w-4" />
+            How to Play
           </Button>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2"
-            >
-              <HelpCircle className="h-4 w-4" />
-              How to Play
-            </Button>
-            <Button
-              className="bg-primary hover:bg-primary/90"
-              onClick={onStart}
-            >
-              Start Playing
-            </Button>
-          </div>
+          <Button
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+            onClick={onStart}
+          >
+            Start Playing
+          </Button>
         </CardFooter>
       </Card>
 
       <Dialog open={showInstructions} onOpenChange={setShowInstructions}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="sm:max-w-2xl w-[calc(100%-2rem)] p-6">
           <DialogHeader>
-            <DialogTitle className="text-2xl flex items-center gap-2">
+            <DialogTitle className="text-xl sm:text-2xl flex items-center gap-2">
               How to Play
             </DialogTitle>
             <DialogDescription>
@@ -152,27 +145,27 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           </DialogHeader>
           
           <div className="space-y-6 py-4">
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="bg-blue-500/10 rounded-full p-3 mt-0.5">
+                  <div className="bg-blue-500/10 rounded-full p-3 mt-0.5 shrink-0">
                     <Target className="h-5 w-5 text-blue-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium">Select & Navigate</h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Click any cell to start. Double-click to switch between across and down. Use arrow keys or tab to move between cells.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="bg-purple-500/10 rounded-full p-3 mt-0.5">
+                  <div className="bg-purple-500/10 rounded-full p-3 mt-0.5 shrink-0">
                     <PenTool className="h-5 w-5 text-purple-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium">Fill in Answers</h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Type letters directly or use the on-screen keyboard. Press backspace to clear a cell. The cursor automatically moves to the next cell.
                     </p>
                   </div>
@@ -181,24 +174,24 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="bg-green-500/10 rounded-full p-3 mt-0.5">
+                  <div className="bg-green-500/10 rounded-full p-3 mt-0.5 shrink-0">
                     <Check className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium">Check Your Progress</h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Use the check button to verify answers. Correct answers turn green, incorrect ones red. Complete all words to finish the puzzle.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="bg-orange-500/10 rounded-full p-3 mt-0.5">
+                  <div className="bg-orange-500/10 rounded-full p-3 mt-0.5 shrink-0">
                     <Clock className="h-5 w-5 text-orange-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium">Take Your Time</h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       There's no time limit - solve at your own pace. Use hints when needed and enjoy the challenge!
                     </p>
                   </div>
