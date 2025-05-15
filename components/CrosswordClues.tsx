@@ -5,6 +5,7 @@ import { Clue, Cell } from "@/types/crossword";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 
 interface CrosswordCluesProps {
   clues: {
@@ -129,24 +130,34 @@ export default function CrosswordClues({
   return (
     <div className="bg-card border rounded-lg overflow-hidden">
       <Tabs defaultValue="across" className="w-full">
-        <TabsList className="w-full grid grid-cols-2">
+        <TabsList className="w-full grid grid-cols-2 p-0 h-12">
           <TabsTrigger 
             value="across"
             className={cn(
-              "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400",
+              "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 rounded-none border-r",
               selectedDirection === 'across' && "font-medium"
             )}
           >
-            Across
+            <div className="flex flex-col items-center">
+              <span className="font-semibold">Across</span>
+              <span className="text-xs text-muted-foreground">
+                {clues.across.length} clues
+              </span>
+            </div>
           </TabsTrigger>
           <TabsTrigger 
             value="down"
             className={cn(
-              "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400",
+              "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 rounded-none",
               selectedDirection === 'down' && "font-medium"
             )}
           >
-            Down
+            <div className="flex flex-col items-center">
+              <span className="font-semibold">Down</span>
+              <span className="text-xs text-muted-foreground">
+                {clues.down.length} clues
+              </span>
+            </div>
           </TabsTrigger>
         </TabsList>
         
@@ -157,7 +168,7 @@ export default function CrosswordClues({
                 <button 
                   key={`across-${clue.number}`}
                   className={cn(
-                    "w-full p-3 text-left transition-colors hover:bg-muted/50",
+                    "w-full p-4 text-left transition-colors hover:bg-muted/50 relative",
                     activeClue?.number === clue.number && activeClue?.direction === 'across'
                       ? "bg-blue-500/10 text-blue-400" 
                       : "",
@@ -169,9 +180,22 @@ export default function CrosswordClues({
                   )}
                   onClick={() => handleClueClick(clue)}
                 >
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-medium text-lg min-w-[1.5rem]">{clue.number}.</span>
-                    <span className="text-sm">{clue.text}</span>
+                  <div className="flex items-start gap-3">
+                    <Badge 
+                      variant={isClueComplete(clue) ? "default" : "outline"}
+                      className={cn(
+                        "h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs font-bold",
+                        isClueComplete(clue) ? "bg-green-500" : ""
+                      )}
+                    >
+                      {clue.number}
+                    </Badge>
+                    <div className="flex-1">
+                      <p className="text-sm leading-relaxed">{clue.text}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {clue.answer.length} letters
+                      </p>
+                    </div>
                   </div>
                 </button>
               ))}
@@ -186,7 +210,7 @@ export default function CrosswordClues({
                 <button 
                   key={`down-${clue.number}`}
                   className={cn(
-                    "w-full p-3 text-left transition-colors hover:bg-muted/50",
+                    "w-full p-4 text-left transition-colors hover:bg-muted/50 relative",
                     activeClue?.number === clue.number && activeClue?.direction === 'down'
                       ? "bg-blue-500/10 text-blue-400" 
                       : "",
@@ -198,9 +222,22 @@ export default function CrosswordClues({
                   )}
                   onClick={() => handleClueClick(clue)}
                 >
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-medium text-lg min-w-[1.5rem]">{clue.number}.</span>
-                    <span className="text-sm">{clue.text}</span>
+                  <div className="flex items-start gap-3">
+                    <Badge 
+                      variant={isClueComplete(clue) ? "default" : "outline"}
+                      className={cn(
+                        "h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs font-bold",
+                        isClueComplete(clue) ? "bg-green-500" : ""
+                      )}
+                    >
+                      {clue.number}
+                    </Badge>
+                    <div className="flex-1">
+                      <p className="text-sm leading-relaxed">{clue.text}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {clue.answer.length} letters
+                      </p>
+                    </div>
                   </div>
                 </button>
               ))}

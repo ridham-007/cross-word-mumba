@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { getPuzzleById } from "@/data/puzzleData";
 import { Cell, Clue, UserProgress } from "@/types/crossword";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, Eraser, Eye, Keyboard, Send } from "lucide-react";
+import { ArrowLeft, Check, Eraser, Eye, Keyboard, Send, Clock } from "lucide-react";
 import CrosswordGrid from "@/components/CrosswordGrid";
 import CrosswordClues from "@/components/CrosswordClues";
 import CrosswordKeyboard from "@/components/CrosswordKeyboard";
 import { useToast } from "@/hooks/use-toast";
+import { formatTime } from "@/lib/utils";
 
 interface CrosswordGameProps {
   puzzleId: string;
@@ -31,6 +32,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [totalCells, setTotalCells] = useState(0);
   const [startTime] = useState(Date.now());
+  const [elapsedTime, setElapsedTime] = useState(0);
   
   // Initialize the grid
   useEffect(() => {
@@ -62,6 +64,15 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
     const isMobile = window.innerWidth < 768;
     setIsKeyboardVisible(isMobile);
   }, [puzzle]);
+
+  // Timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [startTime]);
 
   // Handle physical keyboard input
   useEffect(() => {
@@ -353,8 +364,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       }
     }
     
-    const timeTaken = Math.floor((Date.now() - startTime) / 1000); // Time in seconds
-    onSubmit(correct, totalCells, timeTaken);
+    onSubmit(correct, totalCells, elapsedTime);
   };
   
   // Handle clue selection
@@ -389,7 +399,13 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h1 className="text-2xl font-bold">{puzzle.title}</h1>
+        <div className="flex flex-col items-center">
+          <h1 className="text-2xl font-bold">{puzzle.title}</h1>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Clock className="h-4 w-4" />
+            <span>{formatTime(elapsedTime)}</span>
+          </div>
+        </div>
         <Button
           variant="outline"
           size="icon"
