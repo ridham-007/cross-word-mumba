@@ -32,7 +32,7 @@ export default function CrosswordGrid({
     } else if (cell.isHighlighted) {
       styles += " bg-blue-500/10 border-blue-400/50";
     } else {
-      styles += " bg-gray-800/50 border-gray-700 hover:bg-gray-800/70";
+      styles += " bg-card border-border hover:bg-muted/70";
     }
     
     // Cell validation
@@ -50,14 +50,12 @@ export default function CrosswordGrid({
   return (
     <div className="relative overflow-auto">
       <div 
-        className="grid"
+        className="grid gap-px bg-border"
         style={{ 
           gridTemplateRows: `repeat(${grid.length}, minmax(40px, 1fr))`,
           gridTemplateColumns: `repeat(${grid[0].length}, minmax(40px, 1fr))`,
           maxWidth: `${grid[0].length * 48}px`,
-          margin: '0 auto',
-          gap: '1px',
-          background: 'hsl(var(--border))'
+          margin: '0 auto'
         }}
       >
         {grid.map((row, rowIndex) => (
@@ -75,13 +73,13 @@ export default function CrosswordGrid({
                 {!cell.isBlack && (
                   <>
                     {cell.number && (
-                      <span className="absolute text-[10px] top-0.5 left-0.5 text-gray-400">
+                      <span className="absolute text-[10px] top-0.5 left-0.5 text-muted-foreground">
                         {cell.number}
                       </span>
                     )}
                     <span className={cn(
                       "text-xl font-medium",
-                      cell.isRevealed ? "text-purple-400" : "text-white",
+                      cell.isRevealed ? "text-purple-400" : "text-foreground",
                       isSelected && "animate-pulse"
                     )}>
                       {cell.userInput}

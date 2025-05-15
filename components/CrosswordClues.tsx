@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Clue, Cell } from "@/types/crossword";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CrosswordCluesProps {
   clues: {
@@ -34,8 +35,6 @@ export default function CrosswordClues({
     
     if (cell.isBlack) return;
     
-    let clueNumber = 0;
-    
     // Find the starting cell of the word
     if (selectedDirection === 'across') {
       // Find the leftmost cell of the word
@@ -44,9 +43,8 @@ export default function CrosswordClues({
         startCol--;
       }
       
-      clueNumber = grid[row][startCol].number || 0;
-      
-      const matchingClue = clues.across.find(c => c.number === clueNumber);
+      const startCell = grid[row][startCol];
+      const matchingClue = clues.across.find(c => c.number === startCell.number);
       if (matchingClue) {
         setActiveClue(matchingClue);
       }
@@ -57,9 +55,8 @@ export default function CrosswordClues({
         startRow--;
       }
       
-      clueNumber = grid[startRow][col].number || 0;
-      
-      const matchingClue = clues.down.find(c => c.number === clueNumber);
+      const startCell = grid[startRow][col];
+      const matchingClue = clues.down.find(c => c.number === startCell.number);
       if (matchingClue) {
         setActiveClue(matchingClue);
       }
@@ -123,11 +120,16 @@ export default function CrosswordClues({
     
     return started;
   };
+
+  const handleClueClick = (clue: Clue) => {
+    onClueSelect(clue);
+    setActiveClue(clue);
+  };
   
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden">
+    <div className="bg-card border rounded-lg overflow-hidden">
       <Tabs defaultValue="across" className="w-full">
-        <TabsList className="w-full grid grid-cols-2 bg-gray-900/50">
+        <TabsList className="w-full grid grid-cols-2">
           <TabsTrigger 
             value="across"
             className={cn(
@@ -148,58 +150,62 @@ export default function CrosswordClues({
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="across" className="p-0">
-          <div className="max-h-[600px] overflow-y-auto">
-            <ul className="divide-y divide-gray-700/50">
+        <TabsContent value="across" className="p-0 m-0">
+          <ScrollArea className="h-[400px] sm:h-[600px]">
+            <div className="divide-y divide-border">
               {clues.across.map((clue) => (
-                <li 
+                <button 
                   key={`across-${clue.number}`}
                   className={cn(
-                    "p-3 cursor-pointer transition-colors hover:bg-gray-700/30",
-                    activeClue && activeClue.number === clue.number && activeClue.direction === 'across' 
-                      ? "bg-blue-500/10" 
+                    "w-full p-3 text-left transition-colors hover:bg-muted/50",
+                    activeClue?.number === clue.number && activeClue?.direction === 'across'
+                      ? "bg-blue-500/10 text-blue-400" 
                       : "",
                     isClueComplete(clue) 
                       ? "text-green-400" 
                       : isClueStarted(clue) 
                         ? "text-blue-300" 
-                        : "text-gray-400"
+                        : "text-foreground"
                   )}
-                  onClick={() => onClueSelect(clue)}
+                  onClick={() => handleClueClick(clue)}
                 >
-                  <span className="font-medium mr-2">{clue.number}.</span>
-                  {clue.text}
-                </li>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-medium text-lg min-w-[1.5rem]">{clue.number}.</span>
+                    <span className="text-sm">{clue.text}</span>
+                  </div>
+                </button>
               ))}
-            </ul>
-          </div>
+            </div>
+          </ScrollArea>
         </TabsContent>
         
-        <TabsContent value="down" className="p-0">
-          <div className="max-h-[600px] overflow-y-auto">
-            <ul className="divide-y divide-gray-700/50">
+        <TabsContent value="down" className="p-0 m-0">
+          <ScrollArea className="h-[400px] sm:h-[600px]">
+            <div className="divide-y divide-border">
               {clues.down.map((clue) => (
-                <li 
+                <button 
                   key={`down-${clue.number}`}
                   className={cn(
-                    "p-3 cursor-pointer transition-colors hover:bg-gray-700/30",
-                    activeClue && activeClue.number === clue.number && activeClue.direction === 'down' 
-                      ? "bg-blue-500/10" 
+                    "w-full p-3 text-left transition-colors hover:bg-muted/50",
+                    activeClue?.number === clue.number && activeClue?.direction === 'down'
+                      ? "bg-blue-500/10 text-blue-400" 
                       : "",
                     isClueComplete(clue) 
                       ? "text-green-400" 
                       : isClueStarted(clue) 
                         ? "text-blue-300" 
-                        : "text-gray-400"
+                        : "text-foreground"
                   )}
-                  onClick={() => onClueSelect(clue)}
+                  onClick={() => handleClueClick(clue)}
                 >
-                  <span className="font-medium mr-2">{clue.number}.</span>
-                  {clue.text}
-                </li>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-medium text-lg min-w-[1.5rem]">{clue.number}.</span>
+                    <span className="text-sm">{clue.text}</span>
+                  </div>
+                </button>
               ))}
-            </ul>
-          </div>
+            </div>
+          </ScrollArea>
         </TabsContent>
       </Tabs>
     </div>
