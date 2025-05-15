@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Backpack as Backspace } from "lucide-react";
+import { Delete } from "lucide-react";
 
 interface CrosswordKeyboardProps {
   onKeyPress: (key: string) => void;
@@ -38,17 +38,10 @@ export default function CrosswordKeyboard({ onKeyPress }: CrosswordKeyboardProps
         <div className="flex justify-center gap-1">
           <Button
             variant="outline"
-            className="h-10 sm:h-12 px-3"
-            onClick={() => onKeyPress(' ')}
-          >
-            Space
-          </Button>
-          <Button
-            variant="outline"
             className="h-10 sm:h-12 w-10 p-0"
             onClick={() => onKeyPress('')}
           >
-            <Backspace className="h-4 w-4" />
+            <Delete className="h-4 w-4" />
           </Button>
         </div>
       </div>

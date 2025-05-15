@@ -34,7 +34,7 @@ export interface Clue {
 export interface GameResults {
   correct: number;
   total: number;
-  timeTaken?: number;
+  timeTaken: number;
 }
 
 export interface UserProgress {

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getPuzzleById } from "@/data/puzzleData";
 import { Cell, Clue, UserProgress } from "@/types/crossword";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Check, Eraser, Eye, Send } from "lucide-react";
+import { ArrowLeft, Check, Eraser, Eye, Keyboard, Send } from "lucide-react";
 import CrosswordGrid from "@/components/CrosswordGrid";
 import CrosswordClues from "@/components/CrosswordClues";
 import CrosswordKeyboard from "@/components/CrosswordKeyboard";
@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface CrosswordGameProps {
   puzzleId: string;
-  onSubmit: (correct: number, total: number) => void;
+  onSubmit: (correct: number, total: number, timeTaken: number) => void;
   onBack: () => void;
 }
 
@@ -30,6 +30,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [totalCells, setTotalCells] = useState(0);
+  const [startTime] = useState(Date.now());
   
   // Initialize the grid
   useEffect(() => {
@@ -56,19 +57,11 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       isCompleted: false,
       checkedCells: initialCheckedCells
     });
+
+    // Check if device is mobile
+    const isMobile = window.innerWidth < 768;
+    setIsKeyboardVisible(isMobile);
   }, [puzzle]);
-  
-  // Handle device check for keyboard visibility
-  useEffect(() => {
-    const checkMobile = () => {
-      const isMobile = window.innerWidth < 768;
-      setIsKeyboardVisible(isMobile);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Handle physical keyboard input
   useEffect(() => {
@@ -360,16 +353,8 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       }
     }
     
-    if (filled < totalCells) {
-      toast({
-        title: "Incomplete Puzzle",
-        description: `You've filled ${filled} out of ${totalCells} cells. Continue solving or reveal answers to complete.`,
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    onSubmit(correct, totalCells);
+    const timeTaken = Math.floor((Date.now() - startTime) / 1000); // Time in seconds
+    onSubmit(correct, totalCells, timeTaken);
   };
   
   // Handle clue selection
@@ -405,7 +390,14 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <h1 className="text-2xl font-bold">{puzzle.title}</h1>
-        <div className="w-9"></div> {/* Placeholder for symmetry */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full"
+          onClick={() => setIsKeyboardVisible(!isKeyboardVisible)}
+        >
+          <Keyboard className="h-4 w-4" />
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
