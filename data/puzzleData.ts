@@ -53,70 +53,77 @@ function convertToCluesObject(clueArray: ClueInput[]): CluesOutput {
   return clues;
 }
 
-export const puzzles: CrosswordPuzzle[] = [
+const dummyData = [
   {
     id: "animals",
     title: "Animal Kingdom",
     difficulty: "easy",
     description: "A fun crossword about animals from around the world.",
-    ...generateGrid([
-      { "clue": "Domestic feline pet", "answer": "CAT" },
-      { "clue": "Man's best friend", "answer": "DOG" },
-      { "clue": "Howls at the moon", "answer": "WOLF" },
-      { "clue": "Large omnivore that hibernates", "answer": "BEAR" },
-      { "clue": "Striped big cat", "answer": "TIGER" },
-      { "clue": "Produces milk for humans", "answer": "COW" },
-      { "clue": "Long-necked African animal", "answer": "GIRAFFE" }]
-    ),
+    clues: [
+      { clue: "Domestic feline pet", answer: "CAT" },
+      { clue: "Man's best friend", answer: "DOG" },
+      { clue: "Howls at the moon", answer: "WOLF" },
+      { clue: "Large omnivore that hibernates", answer: "BEAR" },
+      { clue: "Striped big cat", answer: "TIGER" },
+      { clue: "Produces milk for humans", answer: "COW" },
+      { clue: "Long-necked African animal", answer: "GIRAFFE" },
+    ],
   },
   {
     id: "fruits",
     title: "Fruity Delights",
     difficulty: "medium",
     description: "Test your knowledge of various fruits from around the world.",
-    ...generateGrid([
-      { "clue": "Red or green fruit, keeps the doctor away", "answer": "APPLE" },
-      { "clue": "Yellow curved fruit", "answer": "BANANA" },
-      { "clue": "Small round fruit that grows in clusters", "answer": "GRAPE" },
-      { "clue": "Citrus fruit with the same name as a color", "answer": "ORANGE" },
-      { "clue": "Soft fuzzy fruit with a large pit", "answer": "PEACH" },
-      { "clue": "Tropical spiky fruit", "answer": "PINEAPPLE" },
-      { "clue": "Green tropical fruit with a creamy texture", "answer": "KIWI" }
-    ]
-    ),
+    clues: [
+      { clue: "Red or green fruit, keeps the doctor away", answer: "APPLE" },
+      { clue: "Yellow curved fruit", answer: "BANANA" },
+      { clue: "Small round fruit that grows in clusters", answer: "GRAPE" },
+      { clue: "Citrus fruit with the same name as a color", answer: "ORANGE" },
+      { clue: "Soft fuzzy fruit with a large pit", answer: "PEACH" },
+      { clue: "Tropical spiky fruit", answer: "PINEAPPLE" },
+      { clue: "Green tropical fruit with a creamy texture", answer: "KIWI" },
+    ],
   },
   {
     id: "countries",
     title: "World Countries",
     difficulty: "hard",
     description: "Challenge yourself with this crossword about countries around the world.",
-    ...generateGrid([
-      { "clue": "Island nation known for sushi and anime", "answer": "JAPAN" },
-      { "clue": "Largest country in South America", "answer": "BRAZIL" },
-      { "clue": "Home to the Pyramids and Sphinx", "answer": "EGYPT" },
-      { "clue": "European country known for wine and fashion", "answer": "FRANCE" },
-      { "clue": "Largest country by area", "answer": "RUSSIA" },
-      { "clue": "Known for Taj Mahal and Bollywood", "answer": "INDIA" },
-      { "clue": "Nordic country with fjords", "answer": "ITALY" }
-    ]),
+    clues: [
+      { clue: "Island nation known for sushi and anime", answer: "JAPAN" },
+      { clue: "Largest country in South America", answer: "BRAZIL" },
+      { clue: "Home to the Pyramids and Sphinx", answer: "EGYPT" },
+      { clue: "European country known for wine and fashion", answer: "FRANCE" },
+      { clue: "Largest country by area", answer: "RUSSIA" },
+      { clue: "Known for Taj Mahal and Bollywood", answer: "INDIA" },
+      { clue: "Nordic country with fjords", answer: "ITALY" }, // Note: Italy is not Nordic
+    ],
   },
   {
     id: "technology",
     title: "Tech World",
     difficulty: "medium",
     description: "A crossword about technology, computers, and gadgets.",
-    ...generateGrid([
-      { "clue": "Portable computer", "answer": "LAPTOP" },
-      { "clue": "Pointing device for computers", "answer": "MOUSE" },
-      { "clue": "Computer that provides data to other computers", "answer": "SERVER" },
-      { "clue": "Portable touchscreen device", "answer": "TABLET" },
-      { "clue": "Output device for visual display", "answer": "LMST" },
-      { "clue": "Central processing unit", "answer": "PHONE" },
-      { "clue": "Device used to print documents", "answer": "PRINTER" }
-    ]
-    ),
-  }
+    clues: [
+      { clue: "Portable computer", answer: "LAPTOP" },
+      { clue: "Pointing device for computers", answer: "MOUSE" },
+      { clue: "Computer that provides data to other computers", answer: "SERVER" },
+      { clue: "Portable touchscreen device", answer: "TABLET" },
+      { clue: "Output device for visual display", answer: "MONITOR" }, // Fixed incorrect "LMST"
+      { clue: "Central processing unit", answer: "CPU" }, // Fixed incorrect "PHONE"
+      { clue: "Device used to print documents", answer: "PRINTER" },
+    ],
+  },
 ];
+
+export const puzzles: CrosswordPuzzle[] = dummyData.map(({ id, title, difficulty, description, clues }) => ({
+  id,
+  title,
+  difficulty,
+  description,
+  ...generateGrid(clues),
+}));
+
 
 function generateGrid(questions: any): any {
   const puzzleGenerator = clg.generateLayout(questions);
@@ -170,8 +177,6 @@ function generateGrid(questions: any): any {
       };
     }
   }
-  console.log({ grid })
-
   return { grid, clues };
 }
 
