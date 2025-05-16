@@ -148,7 +148,7 @@ function generateGrid(questions: any): any {
   const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
     return cur?.map((cur: string) => (cur === "-" ? "" : cur))
   });
-  
+
   const maxLength = Math.max(...dynamicTemplate.map(row => row.length));
 
   const normalizedTemplate = dynamicTemplate.map(row => {
@@ -195,7 +195,7 @@ function generateGrid(questions: any): any {
 }
 
 // Initialize puzzles with default data for static generation
-export const puzzles: CrosswordPuzzle[] = generatePuzzles(defaultPuzzles);
+export const puzzles: CrosswordPuzzle[] = loadPuzzlesFromStorage();
 
 // Client-side functions for dynamic puzzle management
 let clientPuzzles: CrosswordPuzzle[] | null = null;
@@ -214,10 +214,10 @@ export function savePuzzleProgress(puzzleId: string, progress: any) {
   if (typeof window === 'undefined') return;
 
   const currentPuzzles = loadPuzzlesFromStorage();
-  const updatedPuzzles = currentPuzzles.map(puzzle => 
+  const updatedPuzzles = currentPuzzles.map(puzzle =>
     puzzle.id === puzzleId ? { ...puzzle, ...progress } : puzzle
   );
-  
+
   localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
   clientPuzzles = updatedPuzzles;
 }
@@ -228,7 +228,7 @@ export function createPuzzle(puzzleData: any) {
   const currentPuzzles = loadPuzzlesFromStorage();
   const newPuzzle = generatePuzzles([puzzleData])[0];
   const updatedPuzzles = [...currentPuzzles, newPuzzle];
-  
+
   localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
   clientPuzzles = updatedPuzzles;
   return newPuzzle;
