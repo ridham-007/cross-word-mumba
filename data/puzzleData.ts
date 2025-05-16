@@ -120,13 +120,10 @@ export const puzzles: CrosswordPuzzle[] = [
 
 function generateGrid(questions: any): any {
   const puzzleGenerator = clg.generateLayout(questions);
-  console.log({ puzzleGenerator })
   const clues = convertToCluesObject(puzzleGenerator?.result);
-  console.log({ sd: puzzleGenerator.table })
   const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
     return cur?.map((cur: string) => (cur === "-" ? "" : cur))
   })
-  console.log({ dynamicTemplate })
   // First, find the maximum row length to ensure all rows have the same length
   const maxLength = Math.max(...dynamicTemplate.map(row => row.length));
 
