@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { puzzles } from "@/data/puzzleData";
+import { puzzles, createPuzzle } from "@/data/puzzleData";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { BookOpen, CheckCircle, Clock, Grid3X3, Target, PenTool, Check } from "lucide-react";
+import { BookOpen, CheckCircle, Clock, Grid3X3, Target, PenTool, Check, Plus } from "lucide-react";
+import CreatePuzzleModal from "./CreatePuzzleModal";
 
 interface PuzzleListProps {
   onSelectPuzzle: (puzzleId: string) => void;
@@ -15,6 +16,13 @@ interface PuzzleListProps {
 export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
   const [hoveredPuzzle, setHoveredPuzzle] = useState<string | null>(null);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [puzzleList, setPuzzleList] = useState(puzzles);
+
+  const handleCreatePuzzle = (puzzleData: any) => {
+    const newPuzzle = createPuzzle(puzzleData);
+    setPuzzleList([...puzzleList, newPuzzle]);
+  };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -32,8 +40,18 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
         <p className="text-xl text-muted-foreground">Choose a puzzle and challenge yourself!</p>
       </div>
 
+      <div className="flex justify-center mb-6">
+        <Button 
+          onClick={() => setShowCreateModal(true)}
+          className="bg-primary hover:bg-primary/90"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Create New Puzzle
+        </Button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {puzzles.map((puzzle) => (
+        {puzzleList.map((puzzle) => (
           <Card 
             key={puzzle.id}
             className={`transition-all duration-300 hover:shadow-lg ${
@@ -182,6 +200,12 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <CreatePuzzleModal
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onCreatePuzzle={handleCreatePuzzle}
+      />
     </div>
   );
 }

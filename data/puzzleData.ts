@@ -146,7 +146,7 @@ function generateGrid(questions: any): any {
   const clues = convertToCluesObject(puzzleGenerator?.result);
   const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
     return cur?.map((cur: string) => (cur === "-" ? "" : cur))
-  })
+  });
   
   const maxLength = Math.max(...dynamicTemplate.map(row => row.length));
 
@@ -161,7 +161,6 @@ function generateGrid(questions: any): any {
   let numberMap = new Map<string, number>();
   let currentNumber = 1;
 
-  // First pass: determine cell numbers
   for (let i = 0; i < normalizedTemplate.length; i++) {
     for (let j = 0; j < maxLength; j++) {
       if (normalizedTemplate[i][j] !== "") {
@@ -175,7 +174,6 @@ function generateGrid(questions: any): any {
     }
   }
 
-  // Second pass: create grid with numbers
   for (let i = 0; i < normalizedTemplate.length; i++) {
     grid[i] = [];
     for (let j = 0; j < maxLength; j++) {
@@ -210,4 +208,15 @@ export function savePuzzleProgress(puzzleId: string, progress: any) {
   );
   
   localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
+}
+
+export function createPuzzle(puzzleData: any) {
+  if (typeof window === 'undefined') return;
+
+  const currentPuzzles = loadPuzzlesFromStorage();
+  const newPuzzle = generatePuzzles([puzzleData])[0];
+  const updatedPuzzles = [...currentPuzzles, newPuzzle];
+  
+  localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
+  return newPuzzle;
 }
