@@ -53,7 +53,7 @@ function convertToCluesObject(clueArray: ClueInput[]): CluesOutput {
   return clues;
 }
 
-const dummyData = [
+const defaultPuzzles = [
   {
     id: "animals",
     title: "Animal Kingdom",
@@ -96,7 +96,7 @@ const dummyData = [
       { clue: "European country known for wine and fashion", answer: "FRANCE" },
       { clue: "Largest country by area", answer: "RUSSIA" },
       { clue: "Known for Taj Mahal and Bollywood", answer: "INDIA" },
-      { clue: "Nordic country with fjords", answer: "ITALY" }, // Note: Italy is not Nordic
+      { clue: "Nordic country with fjords", answer: "ITALY" },
     ],
   },
   {
@@ -109,21 +109,37 @@ const dummyData = [
       { clue: "Pointing device for computers", answer: "MOUSE" },
       { clue: "Computer that provides data to other computers", answer: "SERVER" },
       { clue: "Portable touchscreen device", answer: "TABLET" },
-      { clue: "Output device for visual display", answer: "MONITOR" }, // Fixed incorrect "LMST"
-      { clue: "Central processing unit", answer: "CPU" }, // Fixed incorrect "PHONE"
+      { clue: "Output device for visual display", answer: "MONITOR" },
+      { clue: "Central processing unit", answer: "CPU" },
       { clue: "Device used to print documents", answer: "PRINTER" },
     ],
   },
 ];
 
-export const puzzles: CrosswordPuzzle[] = dummyData.map(({ id, title, difficulty, description, clues }) => ({
-  id,
-  title,
-  difficulty,
-  description,
-  ...generateGrid(clues),
-}));
+function loadPuzzlesFromStorage(): CrosswordPuzzle[] {
+  if (typeof window === 'undefined') {
+    return generatePuzzles(defaultPuzzles);
+  }
 
+  const storedPuzzles = localStorage.getItem('crosswordPuzzles');
+  if (!storedPuzzles) {
+    const generatedPuzzles = generatePuzzles(defaultPuzzles);
+    localStorage.setItem('crosswordPuzzles', JSON.stringify(generatedPuzzles));
+    return generatedPuzzles;
+  }
+
+  return JSON.parse(storedPuzzles);
+}
+
+function generatePuzzles(puzzleData: any[]): CrosswordPuzzle[] {
+  return puzzleData.map(({ id, title, difficulty, description, clues }) => ({
+    id,
+    title,
+    difficulty,
+    description,
+    ...generateGrid(clues),
+  }));
+}
 
 function generateGrid(questions: any): any {
   const puzzleGenerator = clg.generateLayout(questions);
@@ -131,10 +147,9 @@ function generateGrid(questions: any): any {
   const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
     return cur?.map((cur: string) => (cur === "-" ? "" : cur))
   })
-  // First, find the maximum row length to ensure all rows have the same length
+  
   const maxLength = Math.max(...dynamicTemplate.map(row => row.length));
 
-  // Normalize the template so all rows have the same length
   const normalizedTemplate = dynamicTemplate.map(row => {
     if (row.length < maxLength) {
       return [...row, ...Array(maxLength - row.length).fill("")];
@@ -180,6 +195,19 @@ function generateGrid(questions: any): any {
   return { grid, clues };
 }
 
+export const puzzles: CrosswordPuzzle[] = loadPuzzlesFromStorage();
+
 export function getPuzzleById(id: string): CrosswordPuzzle | undefined {
   return puzzles.find(puzzle => puzzle.id === id);
+}
+
+export function savePuzzleProgress(puzzleId: string, progress: any) {
+  if (typeof window === 'undefined') return;
+
+  const currentPuzzles = loadPuzzlesFromStorage();
+  const updatedPuzzles = currentPuzzles.map(puzzle => 
+    puzzle.id === puzzleId ? { ...puzzle, ...progress } : puzzle
+  );
+  
+  localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
 }
