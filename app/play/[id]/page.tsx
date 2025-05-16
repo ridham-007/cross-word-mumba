@@ -1,3 +1,17 @@
+import { Metadata } from "next";
+import { puzzles } from "@/data/puzzleData";
+
+export async function generateStaticParams() {
+  return puzzles.map((puzzle) => ({
+    id: puzzle.id,
+  }));
+}
+
+export const metadata: Metadata = {
+  title: 'Play Crossword',
+  description: 'Play your selected crossword puzzle',
+};
+
 "use client";
 
 import { useParams } from "next/navigation";

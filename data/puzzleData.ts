@@ -1,4 +1,5 @@
 "use client";
+
 import { CrosswordPuzzle } from "@/types/crossword";
 import clg from "crossword-layout-generator";
 
@@ -193,9 +194,19 @@ function generateGrid(questions: any): any {
   return { grid, clues };
 }
 
-export const puzzles: CrosswordPuzzle[] = loadPuzzlesFromStorage();
+// Initialize puzzles with default data for static generation
+export const puzzles: CrosswordPuzzle[] = generatePuzzles(defaultPuzzles);
+
+// Client-side functions for dynamic puzzle management
+let clientPuzzles: CrosswordPuzzle[] | null = null;
 
 export function getPuzzleById(id: string): CrosswordPuzzle | undefined {
+  if (typeof window !== 'undefined') {
+    if (!clientPuzzles) {
+      clientPuzzles = loadPuzzlesFromStorage();
+    }
+    return clientPuzzles.find(puzzle => puzzle.id === id);
+  }
   return puzzles.find(puzzle => puzzle.id === id);
 }
 
@@ -208,6 +219,7 @@ export function savePuzzleProgress(puzzleId: string, progress: any) {
   );
   
   localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
+  clientPuzzles = updatedPuzzles;
 }
 
 export function createPuzzle(puzzleData: any) {
@@ -218,5 +230,6 @@ export function createPuzzle(puzzleData: any) {
   const updatedPuzzles = [...currentPuzzles, newPuzzle];
   
   localStorage.setItem('crosswordPuzzles', JSON.stringify(updatedPuzzles));
+  clientPuzzles = updatedPuzzles;
   return newPuzzle;
 }
