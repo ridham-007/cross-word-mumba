@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 
 interface CreatePuzzleModalProps {
   open: boolean;
@@ -13,38 +12,35 @@ interface CreatePuzzleModalProps {
 }
 
 export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }: CreatePuzzleModalProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
-  const [clues, setClues] = useState("");
+  const [prompt, setPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Parse clues from textarea
-    const parsedClues = clues.split('\n')
-      .filter(line => line.trim())
-      .map(line => {
-        const [clue, answer] = line.split('|').map(str => str.trim());
-        return { clue, answer: answer.toUpperCase() };
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/generate-puzzle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
       });
 
-    const puzzleData = {
-      id: title.toLowerCase().replace(/\s+/g, '-'),
-      title,
-      description,
-      difficulty,
-      clues: parsedClues
-    };
+      if (!response.ok) {
+        throw new Error('Failed to generate puzzle');
+      }
 
-    onCreatePuzzle(puzzleData);
-    onOpenChange(false);
-    
-    // Reset form
-    setTitle("");
-    setDescription("");
-    setDifficulty("easy");
-    setClues("");
+      const puzzleData = await response.json();
+      onCreatePuzzle(puzzleData);
+      onOpenChange(false);
+      setPrompt("");
+    } catch (error) {
+      console.error('Error generating puzzle:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -53,64 +49,45 @@ export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }
         <DialogHeader>
           <DialogTitle>Create New Puzzle</DialogTitle>
           <DialogDescription>
-            Create your own crossword puzzle. Add clues in the format: "clue | answer" (one per line)
+            Enter a topic or theme for your crossword puzzle and we'll generate it for you.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="prompt">Puzzle Topic</Label>
             <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter puzzle title"
+              id="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="e.g., Create a puzzle about Indian culture"
               required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter puzzle description"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="difficulty">Difficulty</Label>
-            <Select value={difficulty} onValueChange={(value: any) => setDifficulty(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="hard">Hard</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="clues">Clues</Label>
-            <Textarea
-              id="clues"
-              value={clues}
-              onChange={(e) => setClues(e.target.value)}
-              placeholder="Enter clues (one per line)&#10;Example:&#10;Man's best friend | DOG&#10;Domestic feline pet | CAT"
-              className="min-h-[200px] font-mono"
-              required
+              disabled={isLoading}
             />
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
-            <Button type="submit">Create Puzzle</Button>
+            <Button 
+              type="submit"
+              disabled={isLoading || !prompt.trim()}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                'Create Puzzle'
+              )}
+            </Button>
           </div>
         </form>
       </DialogContent>
