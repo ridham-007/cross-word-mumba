@@ -9,27 +9,24 @@ export const puzzles: CrosswordPuzzle[] = [
     description: "A fun crossword about animals from around the world.",
     grid: generateGrid([
       ["C", "A", "T", "", "D", "O", "G"],
-      ["O", "", "I", "", "U", "", "I"],
-      ["W", "O", "L", "F", "C", "", "R"],
-      ["", "", "E", "", "K", "", "A"],
-      ["B", "E", "A", "R", "", "F", "F"],
-      ["A", "", "", "", "L", "I", "O", "N"],
-      ["T", "I", "G", "E", "R", "", "", ""]
+      ["O", "", "", "", "", "", "I"],
+      ["W", "O", "L", "F", "", "", "R"],
+      ["", "", "", "", "", "", "A"],
+      ["B", "E", "A", "R", "", "", "F"],
+      ["A", "", "", "", "", "", "F"],
+      ["T", "I", "G", "E", "R", "", "E"]
     ]),
     clues: {
       across: [
         { number: 1, text: "Domestic feline pet", answer: "CAT", row: 0, col: 0, direction: "across" },
-        { number: 2, text: "Man's best friend", answer: "DOG", row: 0, col: 4, direction: "across" },
-        { number: 3, text: "Howls at the moon", answer: "WOLF", row: 2, col: 0, direction: "across" },
-        { number: 4, text: "Large omnivore that hibernates", answer: "BEAR", row: 4, col: 0, direction: "across" },
-        { number: 5, text: "King of the jungle", answer: "LION", row: 5, col: 4, direction: "across" },
-        { number: 6, text: "Striped big cat", answer: "TIGER", row: 6, col: 0, direction: "across" }
+        { number: 4, text: "Man's best friend", answer: "DOG", row: 0, col: 4, direction: "across" },
+        { number: 5, text: "Howls at the moon", answer: "WOLF", row: 2, col: 0, direction: "across" },
+        { number: 7, text: "Large omnivore that hibernates", answer: "BEAR", row: 4, col: 0, direction: "across" },
+        { number: 8, text: "Striped big cat", answer: "TIGER", row: 6, col: 0, direction: "across" }
       ],
       down: [
         { number: 1, text: "Produces milk for humans", answer: "COW", row: 0, col: 0, direction: "down" },
-        { number: 7, text: "Long-necked African animal", answer: "GIRAFFE", row: 0, col: 6, direction: "down" },
-        { number: 2, text: "Quacks and swims", answer: "DUCK", row: 0, col: 4, direction: "down" },
-        { number: 8, text: "Large endangered black and white bear", answer: "PANDA", row: 4, col: 5, direction: "down" }
+        { number: 2, text: "Long-necked African animal", answer: "GIRAFFE", row: 0, col: 6, direction: "down" }
       ]
     }
   },
@@ -42,7 +39,7 @@ export const puzzles: CrosswordPuzzle[] = [
       ["A", "P", "P", "L", "E", "", ""],
       ["", "E", "", "", "", "K", ""],
       ["B", "A", "N", "A", "N", "A", ""],
-      ["", "R", "", "", "", "N", ""],
+      ["", "R", "", "", "", "W", ""],
       ["", "", "G", "R", "A", "P", "E"],
       ["O", "R", "A", "N", "G", "E", ""],
       ["", "", "", "", "", "", ""]
@@ -70,23 +67,24 @@ export const puzzles: CrosswordPuzzle[] = [
       ["J", "A", "P", "A", "N", "", ""],
       ["", "", "O", "", "", "F", ""],
       ["B", "R", "A", "Z", "I", "L", ""],
-      ["", "U", "N", "", "T", "A", ""],
-      ["", "S", "D", "", "A", "N", ""],
-      ["E", "G", "Y", "P", "T", "C", "E"],
-      ["", "I", "", "", "", "E", ""]
+      ["", "U", "", "", "N", "A", ""],
+      ["", "S", "", "", "D", "N", ""],
+      ["E", "G", "Y", "P", "T", "C", ""],
+      ["", "I", "", "", "A", "E", ""],
+      ["", "A", "", "", "L", "", ""],
+      ["", "", "", "", "Y", "", ""]
     ]),
     clues: {
       across: [
         { number: 1, text: "Island nation known for sushi and anime", answer: "JAPAN", row: 0, col: 0, direction: "across" },
         { number: 3, text: "Largest country in South America", answer: "BRAZIL", row: 2, col: 0, direction: "across" },
-        { number: 6, text: "Home to the Pyramids and Sphinx", answer: "EGYPT", row: 5, col: 0, direction: "across" }
+        { number: 5, text: "Home to the Pyramids and Sphinx", answer: "EGYPT", row: 5, col: 0, direction: "across" }
       ],
       down: [
         { number: 1, text: "European country known for wine and fashion", answer: "FRANCE", row: 0, col: 5, direction: "down" },
         { number: 2, text: "Largest country by area", answer: "RUSSIA", row: 0, col: 1, direction: "down" },
         { number: 4, text: "Known for Taj Mahal and Bollywood", answer: "INDIA", row: 0, col: 4, direction: "down" },
-        { number: 5, text: "Country with the largest population", answer: "CHINA", row: 3, col: 5, direction: "down" },
-        { number: 7, text: "Nordic country with fjords", answer: "POLAND", row: 0, col: 2, direction: "down" }
+        { number: 6, text: "Nordic country with fjords", answer: "ITALY", row: 2, col: 4, direction: "down" }
       ]
     }
   },
@@ -112,9 +110,9 @@ export const puzzles: CrosswordPuzzle[] = [
         { number: 7, text: "Portable touchscreen device", answer: "TABLET", row: 6, col: 1, direction: "across" }
       ],
       down: [
-        { number: 1, text: "Output device for visual display", answer: "MONITOR", row: 0, col: 0, direction: "down" },
+        { number: 1, text: "Output device for visual display", answer: "LMST", row: 0, col: 0, direction: "down" },
         { number: 2, text: "Central processing unit", answer: "PHONE", row: 0, col: 2, direction: "down" },
-        { number: 4, text: "Device to input text", answer: "PRINTER", row: 0, col: 5, direction: "down" }
+        { number: 4, text: "Device used to print documents", answer: "PRINTER", row: 0, col: 5, direction: "down" }
       ]
     }
   }
@@ -123,7 +121,7 @@ export const puzzles: CrosswordPuzzle[] = [
 function generateGrid(template: string[][]): any[][] {
   // First, find the maximum row length to ensure all rows have the same length
   const maxLength = Math.max(...template.map(row => row.length));
-  
+
   // Normalize the template so all rows have the same length
   const normalizedTemplate = template.map(row => {
     if (row.length < maxLength) {
@@ -131,25 +129,25 @@ function generateGrid(template: string[][]): any[][] {
     }
     return row;
   });
-  
+
   const grid: any[][] = [];
   let numberMap = new Map<string, number>();
   let currentNumber = 1;
-  
+
   // First pass: determine cell numbers
   for (let i = 0; i < normalizedTemplate.length; i++) {
     for (let j = 0; j < maxLength; j++) {
       if (normalizedTemplate[i][j] !== "") {
-        const isStartOfAcross = j === 0 || normalizedTemplate[i][j-1] === "";
-        const isStartOfDown = i === 0 || normalizedTemplate[i-1][j] === "";
-        
+        const isStartOfAcross = j === 0 || normalizedTemplate[i][j - 1] === "";
+        const isStartOfDown = i === 0 || normalizedTemplate[i - 1][j] === "";
+
         if (isStartOfAcross || isStartOfDown) {
           numberMap.set(`${i},${j}`, currentNumber++);
         }
       }
     }
   }
-  
+
   // Second pass: create grid with numbers
   for (let i = 0; i < normalizedTemplate.length; i++) {
     grid[i] = [];
@@ -167,7 +165,7 @@ function generateGrid(template: string[][]): any[][] {
       };
     }
   }
-  
+
   return grid;
 }
 
