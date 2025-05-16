@@ -20,7 +20,7 @@ interface CrosswordGameProps {
 export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordGameProps) {
   const puzzle = getPuzzleById(puzzleId);
   const { toast } = useToast();
-  
+
   const [userProgress, setUserProgress] = useState<UserProgress>({
     userGrid: [],
     selectedCell: null,
@@ -28,20 +28,19 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
     isCompleted: false,
     checkedCells: []
   });
-  
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [totalCells, setTotalCells] = useState(0);
   const [startTime] = useState(Date.now());
   const [elapsedTime, setElapsedTime] = useState(0);
-  
+
   // Initialize the grid
   useEffect(() => {
     if (!puzzle) return;
-    
+
     const initialGrid = JSON.parse(JSON.stringify(puzzle.grid));
     const initialCheckedCells = Array(puzzle.grid.length).fill(null)
       .map(() => Array(puzzle.grid[0].length).fill(false));
-    
+
     let count = 0;
     for (let i = 0; i < initialGrid.length; i++) {
       for (let j = 0; j < initialGrid[i].length; j++) {
@@ -50,7 +49,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         }
       }
     }
-    
+
     setTotalCells(count);
     setUserProgress({
       userGrid: initialGrid,
@@ -92,28 +91,28 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [userProgress.selectedCell]);
-  
+
   // Navigate to next cell
   const moveToNextCell = useCallback(() => {
     if (!userProgress.selectedCell || !puzzle) return;
-    
+
     const { row, col } = userProgress.selectedCell;
     const { userGrid, selectedDirection } = userProgress;
-    
+
     let nextRow = row;
     let nextCol = col;
-    
+
     if (selectedDirection === 'across') {
       nextCol = col + 1;
       while (nextCol < userGrid[0].length && userGrid[nextRow][nextCol].isBlack) {
         nextCol++;
       }
-      
+
       if (nextCol >= userGrid[0].length) {
         // Move to the next row
         nextRow++;
         nextCol = 0;
-        
+
         while (nextRow < userGrid.length) {
           while (nextCol < userGrid[0].length) {
             if (!userGrid[nextRow][nextCol].isBlack) {
@@ -121,7 +120,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
             }
             nextCol++;
           }
-          
+
           if (nextCol < userGrid[0].length) break;
           nextRow++;
           nextCol = 0;
@@ -132,12 +131,12 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       while (nextRow < userGrid.length && userGrid[nextRow][nextCol].isBlack) {
         nextRow++;
       }
-      
+
       if (nextRow >= userGrid.length) {
         // Move to the next column
         nextCol++;
         nextRow = 0;
-        
+
         while (nextCol < userGrid[0].length) {
           while (nextRow < userGrid.length) {
             if (!userGrid[nextRow][nextCol].isBlack) {
@@ -145,14 +144,14 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
             }
             nextRow++;
           }
-          
+
           if (nextRow < userGrid.length) break;
           nextCol++;
           nextRow = 0;
         }
       }
     }
-    
+
     if (nextRow < userGrid.length && nextCol < userGrid[0].length) {
       setUserProgress(prev => ({
         ...prev,
@@ -164,9 +163,9 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   // Find the starting cell of a word
   const findWordStart = (row: number, col: number, direction: 'across' | 'down'): { row: number; col: number } => {
     if (!puzzle) return { row, col };
-    
+
     const { userGrid } = userProgress;
-    
+
     if (direction === 'across') {
       let startCol = col;
       while (startCol > 0 && !userGrid[row][startCol - 1].isBlack) {
@@ -181,35 +180,35 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       return { row: startRow, col };
     }
   };
-  
+
   // Handle cell selection
   const handleCellSelect = (row: number, col: number) => {
     if (!puzzle) return;
-    
+
     const { userGrid, selectedCell, selectedDirection } = userProgress;
-    
+
     if (userGrid[row][col].isBlack) return;
-    
+
     let newDirection = selectedDirection;
-    
+
     // Toggle direction if selecting the same cell
     if (selectedCell?.row === row && selectedCell?.col === col) {
       newDirection = selectedDirection === 'across' ? 'down' : 'across';
     }
-    
+
     // Find the word boundaries and highlight cells
     const newGrid = JSON.parse(JSON.stringify(userGrid));
-    
+
     // Clear previous highlights
     for (let i = 0; i < newGrid.length; i++) {
       for (let j = 0; j < newGrid[i].length; j++) {
         newGrid[i][j].isHighlighted = false;
       }
     }
-    
+
     // Find the start of the word
     const wordStart = findWordStart(row, col, newDirection);
-    
+
     // Highlight the word
     if (newDirection === 'across') {
       let currentCol = wordStart.col;
@@ -224,7 +223,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         currentRow++;
       }
     }
-    
+
     setUserProgress({
       ...userProgress,
       userGrid: newGrid,
@@ -232,36 +231,36 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       selectedDirection: newDirection
     });
   };
-  
+
   // Handle input
   const handleInput = (value: string) => {
     if (!userProgress.selectedCell || !puzzle) return;
-    
+
     const { row, col } = userProgress.selectedCell;
     const newGrid = [...userProgress.userGrid];
-    
+
     // Update the cell
     newGrid[row][col].userInput = value.toUpperCase();
-    
+
     setUserProgress({
       ...userProgress,
       userGrid: newGrid
     });
-    
+
     // Move to next cell if a letter was entered
     if (value !== '') {
       moveToNextCell();
     }
   };
-  
+
   // Check answers
   const handleCheck = () => {
     if (!puzzle) return;
-    
+
     const { userGrid } = userProgress;
     const newGrid = [...userGrid];
     const newCheckedCells = [...userProgress.checkedCells];
-    
+
     for (let i = 0; i < newGrid.length; i++) {
       for (let j = 0; j < newGrid[i].length; j++) {
         if (!newGrid[i][j].isBlack && newGrid[i][j].userInput) {
@@ -270,26 +269,26 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         }
       }
     }
-    
+
     setUserProgress({
       ...userProgress,
       userGrid: newGrid,
       checkedCells: newCheckedCells
     });
-    
+
     toast({
       title: "Answers Checked",
       description: "Correct answers are highlighted in green, incorrect in red."
     });
   };
-  
+
   // Reveal all answers
   const handleReveal = () => {
     if (!puzzle) return;
-    
+
     const { userGrid } = userProgress;
     const newGrid = [...userGrid];
-    
+
     for (let i = 0; i < newGrid.length; i++) {
       for (let j = 0; j < newGrid[i].length; j++) {
         if (!newGrid[i][j].isBlack) {
@@ -299,28 +298,28 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         }
       }
     }
-    
+
     setUserProgress({
       ...userProgress,
       userGrid: newGrid,
       isCompleted: true
     });
-    
+
     toast({
       title: "All Answers Revealed",
       description: "The complete solution has been revealed.",
       variant: "destructive"
     });
   };
-  
+
   // Clear the grid
   const handleClear = () => {
     if (!puzzle) return;
-    
+
     const newGrid = [...userProgress.userGrid];
     const newCheckedCells = Array(puzzle.grid.length).fill(null)
       .map(() => Array(puzzle.grid[0].length).fill(false));
-    
+
     for (let i = 0; i < newGrid.length; i++) {
       for (let j = 0; j < newGrid[i].length; j++) {
         if (!newGrid[i][j].isBlack) {
@@ -330,27 +329,27 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         }
       }
     }
-    
+
     setUserProgress({
       ...userProgress,
       userGrid: newGrid,
       checkedCells: newCheckedCells
     });
-    
+
     toast({
       title: "Grid Cleared",
       description: "All your answers have been cleared."
     });
   };
-  
+
   // Submit the puzzle
   const handleSubmit = () => {
     if (!puzzle) return;
-    
+
     const { userGrid } = userProgress;
     let correct = 0;
     let filled = 0;
-    
+
     for (let i = 0; i < userGrid.length; i++) {
       for (let j = 0; j < userGrid[i].length; j++) {
         if (!userGrid[i][j].isBlack) {
@@ -363,14 +362,14 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         }
       }
     }
-    
+
     onSubmit(correct, totalCells, elapsedTime);
   };
-  
+
   // Handle clue selection
   const handleClueSelect = (clue: Clue) => {
     if (!puzzle) return;
-    
+
     // Find the starting cell of the clue
     handleCellSelect(clue.row, clue.col);
     setUserProgress(prev => ({
@@ -378,7 +377,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       selectedDirection: clue.direction
     }));
   };
-  
+
   if (!puzzle) {
     return (
       <div className="text-center">
@@ -387,11 +386,11 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       </div>
     );
   }
-  
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <Button 
+        <Button
           onClick={onBack}
           variant="outline"
           size="icon"
@@ -415,17 +414,17 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
           <Keyboard className="h-4 w-4" />
         </Button>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <CrosswordGrid 
+          <CrosswordGrid
             grid={userProgress.userGrid}
             selectedCell={userProgress.selectedCell}
             selectedDirection={userProgress.selectedDirection}
             checkedCells={userProgress.checkedCells}
             onCellSelect={handleCellSelect}
           />
-          
+
           <div className="mt-6 flex flex-wrap gap-3 justify-center">
             <Button
               variant="outline"
@@ -459,17 +458,17 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
               Submit
             </Button>
           </div>
-          
+
           {isKeyboardVisible && (
             <div className="mt-4">
               <CrosswordKeyboard onKeyPress={handleInput} />
             </div>
           )}
         </div>
-        
+
         <div className="lg:col-span-1">
-          <CrosswordClues 
-            clues={puzzle.clues} 
+          <CrosswordClues
+            clues={puzzle.clues}
             selectedCell={userProgress.selectedCell}
             selectedDirection={userProgress.selectedDirection}
             grid={userProgress.userGrid}

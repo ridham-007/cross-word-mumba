@@ -18,24 +18,24 @@ interface CrosswordCluesProps {
   onClueSelect: (clue: Clue) => void;
 }
 
-export default function CrosswordClues({ 
-  clues, 
-  selectedCell, 
+export default function CrosswordClues({
+  clues,
+  selectedCell,
   selectedDirection,
   grid,
-  onClueSelect 
+  onClueSelect
 }: CrosswordCluesProps) {
   const [activeClue, setActiveClue] = useState<Clue | null>(null);
-  
+
   // Update active clue when selected cell changes
   useEffect(() => {
     if (!selectedCell || !grid.length) return;
-    
+
     const { row, col } = selectedCell;
     const cell = grid[row][col];
-    
+
     if (cell.isBlack) return;
-    
+
     // Find the starting cell of the word
     if (selectedDirection === 'across') {
       // Find the leftmost cell of the word
@@ -43,7 +43,7 @@ export default function CrosswordClues({
       while (startCol > 0 && !grid[row][startCol - 1].isBlack) {
         startCol--;
       }
-      
+
       const startCell = grid[row][startCol];
       const matchingClue = clues.across.find(c => c.number === startCell.number);
       if (matchingClue) {
@@ -55,7 +55,7 @@ export default function CrosswordClues({
       while (startRow > 0 && !grid[startRow - 1][col].isBlack) {
         startRow--;
       }
-      
+
       const startCell = grid[startRow][col];
       const matchingClue = clues.down.find(c => c.number === startCell.number);
       if (matchingClue) {
@@ -63,13 +63,13 @@ export default function CrosswordClues({
       }
     }
   }, [selectedCell, selectedDirection, grid, clues]);
-  
+
   // Check if a word is complete
   const isClueComplete = (clue: Clue) => {
     if (!grid.length) return false;
-    
+
     let complete = true;
-    
+
     if (clue.direction === 'across') {
       let col = clue.col;
       while (col < grid[0].length && !grid[clue.row][col].isBlack) {
@@ -89,16 +89,16 @@ export default function CrosswordClues({
         row++;
       }
     }
-    
+
     return complete;
   };
-  
+
   // Check if a clue has any letters filled
   const isClueStarted = (clue: Clue) => {
     if (!grid.length) return false;
-    
+
     let started = false;
-    
+
     if (clue.direction === 'across') {
       let col = clue.col;
       while (col < grid[0].length && !grid[clue.row][col].isBlack) {
@@ -118,7 +118,7 @@ export default function CrosswordClues({
         row++;
       }
     }
-    
+
     return started;
   };
 
@@ -126,12 +126,12 @@ export default function CrosswordClues({
     onClueSelect(clue);
     setActiveClue(clue);
   };
-  
+
   return (
     <div className="bg-card border rounded-lg overflow-hidden">
       <Tabs defaultValue="across" className="w-full">
         <TabsList className="w-full grid grid-cols-2 p-0 h-12">
-          <TabsTrigger 
+          <TabsTrigger
             value="across"
             className={cn(
               "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 rounded-none border-r",
@@ -145,7 +145,7 @@ export default function CrosswordClues({
               </span>
             </div>
           </TabsTrigger>
-          <TabsTrigger 
+          <TabsTrigger
             value="down"
             className={cn(
               "text-sm data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 rounded-none",
@@ -160,28 +160,28 @@ export default function CrosswordClues({
             </div>
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="across" className="p-0 m-0">
           <ScrollArea className="h-[400px] sm:h-[600px]">
             <div className="divide-y divide-border">
               {clues.across.map((clue) => (
-                <button 
+                <button
                   key={`across-${clue.number}`}
                   className={cn(
                     "w-full p-4 text-left transition-colors hover:bg-muted/50 relative",
                     activeClue?.number === clue.number && activeClue?.direction === 'across'
-                      ? "bg-blue-500/10 text-blue-400" 
+                      ? "bg-blue-500/10 text-blue-400"
                       : "",
-                    isClueComplete(clue) 
-                      ? "text-green-400" 
-                      : isClueStarted(clue) 
-                        ? "text-blue-300" 
+                    isClueComplete(clue)
+                      ? "text-green-400"
+                      : isClueStarted(clue)
+                        ? "text-blue-300"
                         : "text-foreground"
                   )}
                   onClick={() => handleClueClick(clue)}
                 >
                   <div className="flex items-start gap-3">
-                    <Badge 
+                    <Badge
                       variant={isClueComplete(clue) ? "default" : "outline"}
                       className={cn(
                         "h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs font-bold",
@@ -202,28 +202,28 @@ export default function CrosswordClues({
             </div>
           </ScrollArea>
         </TabsContent>
-        
+
         <TabsContent value="down" className="p-0 m-0">
           <ScrollArea className="h-[400px] sm:h-[600px]">
             <div className="divide-y divide-border">
               {clues.down.map((clue) => (
-                <button 
+                <button
                   key={`down-${clue.number}`}
                   className={cn(
                     "w-full p-4 text-left transition-colors hover:bg-muted/50 relative",
                     activeClue?.number === clue.number && activeClue?.direction === 'down'
-                      ? "bg-blue-500/10 text-blue-400" 
+                      ? "bg-blue-500/10 text-blue-400"
                       : "",
-                    isClueComplete(clue) 
-                      ? "text-green-400" 
-                      : isClueStarted(clue) 
-                        ? "text-blue-300" 
+                    isClueComplete(clue)
+                      ? "text-green-400"
+                      : isClueStarted(clue)
+                        ? "text-blue-300"
                         : "text-foreground"
                   )}
                   onClick={() => handleClueClick(clue)}
                 >
                   <div className="flex items-start gap-3">
-                    <Badge 
+                    <Badge
                       variant={isClueComplete(clue) ? "default" : "outline"}
                       className={cn(
                         "h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs font-bold",

@@ -1,129 +1,137 @@
+"use client";
 import { CrosswordPuzzle } from "@/types/crossword";
+import clg from "crossword-layout-generator";
 
-// Sample crossword puzzles
+type Orientation = "across" | "down";
+
+interface ClueInput {
+  clue: string;
+  answer: string;
+  startx: number;
+  starty: number;
+  orientation: Orientation;
+  position: number;
+}
+
+interface ClueFormatted {
+  number: number;
+  text: string;
+  answer: string;
+  row: number;
+  col: number;
+  direction: Orientation;
+}
+
+interface CluesOutput {
+  across: ClueFormatted[];
+  down: ClueFormatted[];
+}
+
+function convertToCluesObject(clueArray: ClueInput[]): CluesOutput {
+  const clues: CluesOutput = {
+    across: [],
+    down: []
+  };
+
+  clueArray.forEach((item) => {
+    const formatted: ClueFormatted = {
+      number: item.position,
+      text: item.clue,
+      answer: item.answer,
+      row: item.starty - 1,
+      col: item.startx - 1,
+      direction: item.orientation
+    };
+
+    if (item.orientation === "across") {
+      clues.across.push(formatted);
+    } else if (item.orientation === "down") {
+      clues.down.push(formatted);
+    }
+  });
+
+  return clues;
+}
+
 export const puzzles: CrosswordPuzzle[] = [
   {
     id: "animals",
     title: "Animal Kingdom",
     difficulty: "easy",
     description: "A fun crossword about animals from around the world.",
-    grid: generateGrid([
-      ["C", "A", "T", "", "D", "O", "G"],
-      ["O", "", "", "", "", "", "I"],
-      ["W", "O", "L", "F", "", "", "R"],
-      ["", "", "", "", "", "", "A"],
-      ["B", "E", "A", "R", "", "", "F"],
-      ["A", "", "", "", "", "", "F"],
-      ["T", "I", "G", "E", "R", "", "E"]
-    ]),
-    clues: {
-      across: [
-        { number: 1, text: "Domestic feline pet", answer: "CAT", row: 0, col: 0, direction: "across" },
-        { number: 4, text: "Man's best friend", answer: "DOG", row: 0, col: 4, direction: "across" },
-        { number: 5, text: "Howls at the moon", answer: "WOLF", row: 2, col: 0, direction: "across" },
-        { number: 7, text: "Large omnivore that hibernates", answer: "BEAR", row: 4, col: 0, direction: "across" },
-        { number: 8, text: "Striped big cat", answer: "TIGER", row: 6, col: 0, direction: "across" }
-      ],
-      down: [
-        { number: 1, text: "Produces milk for humans", answer: "COW", row: 0, col: 0, direction: "down" },
-        { number: 2, text: "Long-necked African animal", answer: "GIRAFFE", row: 0, col: 6, direction: "down" }
-      ]
-    }
+    ...generateGrid([
+      { "clue": "Domestic feline pet", "answer": "CAT" },
+      { "clue": "Man's best friend", "answer": "DOG" },
+      { "clue": "Howls at the moon", "answer": "WOLF" },
+      { "clue": "Large omnivore that hibernates", "answer": "BEAR" },
+      { "clue": "Striped big cat", "answer": "TIGER" },
+      { "clue": "Produces milk for humans", "answer": "COW" },
+      { "clue": "Long-necked African animal", "answer": "GIRAFFE" }]
+    ),
   },
   {
     id: "fruits",
     title: "Fruity Delights",
     difficulty: "medium",
     description: "Test your knowledge of various fruits from around the world.",
-    grid: generateGrid([
-      ["A", "P", "P", "L", "E", "", ""],
-      ["", "E", "", "", "", "K", ""],
-      ["B", "A", "N", "A", "N", "A", ""],
-      ["", "R", "", "", "", "W", ""],
-      ["", "", "G", "R", "A", "P", "E"],
-      ["O", "R", "A", "N", "G", "E", ""],
-      ["", "", "", "", "", "", ""]
-    ]),
-    clues: {
-      across: [
-        { number: 1, text: "Red or green fruit, keeps the doctor away", answer: "APPLE", row: 0, col: 0, direction: "across" },
-        { number: 3, text: "Yellow curved fruit", answer: "BANANA", row: 2, col: 0, direction: "across" },
-        { number: 5, text: "Small round fruit that grows in clusters", answer: "GRAPE", row: 4, col: 2, direction: "across" },
-        { number: 6, text: "Citrus fruit with the same name as a color", answer: "ORANGE", row: 5, col: 0, direction: "across" }
-      ],
-      down: [
-        { number: 1, text: "Soft fuzzy fruit with a large pit", answer: "PEACH", row: 0, col: 1, direction: "down" },
-        { number: 2, text: "Tropical spiky fruit", answer: "PINEAPPLE", row: 0, col: 2, direction: "down" },
-        { number: 4, text: "Green tropical fruit with a creamy texture", answer: "KIWI", row: 0, col: 5, direction: "down" }
-      ]
-    }
+    ...generateGrid([
+      { "clue": "Red or green fruit, keeps the doctor away", "answer": "APPLE" },
+      { "clue": "Yellow curved fruit", "answer": "BANANA" },
+      { "clue": "Small round fruit that grows in clusters", "answer": "GRAPE" },
+      { "clue": "Citrus fruit with the same name as a color", "answer": "ORANGE" },
+      { "clue": "Soft fuzzy fruit with a large pit", "answer": "PEACH" },
+      { "clue": "Tropical spiky fruit", "answer": "PINEAPPLE" },
+      { "clue": "Green tropical fruit with a creamy texture", "answer": "KIWI" }
+    ]
+    ),
   },
   {
     id: "countries",
     title: "World Countries",
     difficulty: "hard",
     description: "Challenge yourself with this crossword about countries around the world.",
-    grid: generateGrid([
-      ["J", "A", "P", "A", "N", "", ""],
-      ["", "", "O", "", "", "F", ""],
-      ["B", "R", "A", "Z", "I", "L", ""],
-      ["", "U", "", "", "N", "A", ""],
-      ["", "S", "", "", "D", "N", ""],
-      ["E", "G", "Y", "P", "T", "C", ""],
-      ["", "I", "", "", "A", "E", ""],
-      ["", "A", "", "", "L", "", ""],
-      ["", "", "", "", "Y", "", ""]
+    ...generateGrid([
+      { "clue": "Island nation known for sushi and anime", "answer": "JAPAN" },
+      { "clue": "Largest country in South America", "answer": "BRAZIL" },
+      { "clue": "Home to the Pyramids and Sphinx", "answer": "EGYPT" },
+      { "clue": "European country known for wine and fashion", "answer": "FRANCE" },
+      { "clue": "Largest country by area", "answer": "RUSSIA" },
+      { "clue": "Known for Taj Mahal and Bollywood", "answer": "INDIA" },
+      { "clue": "Nordic country with fjords", "answer": "ITALY" }
     ]),
-    clues: {
-      across: [
-        { number: 1, text: "Island nation known for sushi and anime", answer: "JAPAN", row: 0, col: 0, direction: "across" },
-        { number: 3, text: "Largest country in South America", answer: "BRAZIL", row: 2, col: 0, direction: "across" },
-        { number: 5, text: "Home to the Pyramids and Sphinx", answer: "EGYPT", row: 5, col: 0, direction: "across" }
-      ],
-      down: [
-        { number: 1, text: "European country known for wine and fashion", answer: "FRANCE", row: 0, col: 5, direction: "down" },
-        { number: 2, text: "Largest country by area", answer: "RUSSIA", row: 0, col: 1, direction: "down" },
-        { number: 4, text: "Known for Taj Mahal and Bollywood", answer: "INDIA", row: 0, col: 4, direction: "down" },
-        { number: 6, text: "Nordic country with fjords", answer: "ITALY", row: 2, col: 4, direction: "down" }
-      ]
-    }
   },
   {
     id: "technology",
     title: "Tech World",
     difficulty: "medium",
     description: "A crossword about technology, computers, and gadgets.",
-    grid: generateGrid([
-      ["L", "A", "P", "T", "O", "P", ""],
-      ["", "", "H", "", "", "R", ""],
-      ["M", "O", "U", "S", "E", "I", ""],
-      ["", "", "N", "", "", "N", ""],
-      ["S", "E", "R", "V", "E", "R", ""],
-      ["", "", "", "", "", "E", ""],
-      ["", "T", "A", "B", "L", "E", "T"]
-    ]),
-    clues: {
-      across: [
-        { number: 1, text: "Portable computer", answer: "LAPTOP", row: 0, col: 0, direction: "across" },
-        { number: 3, text: "Pointing device for computers", answer: "MOUSE", row: 2, col: 0, direction: "across" },
-        { number: 5, text: "Computer that provides data to other computers", answer: "SERVER", row: 4, col: 0, direction: "across" },
-        { number: 7, text: "Portable touchscreen device", answer: "TABLET", row: 6, col: 1, direction: "across" }
-      ],
-      down: [
-        { number: 1, text: "Output device for visual display", answer: "LMST", row: 0, col: 0, direction: "down" },
-        { number: 2, text: "Central processing unit", answer: "PHONE", row: 0, col: 2, direction: "down" },
-        { number: 4, text: "Device used to print documents", answer: "PRINTER", row: 0, col: 5, direction: "down" }
-      ]
-    }
+    ...generateGrid([
+      { "clue": "Portable computer", "answer": "LAPTOP" },
+      { "clue": "Pointing device for computers", "answer": "MOUSE" },
+      { "clue": "Computer that provides data to other computers", "answer": "SERVER" },
+      { "clue": "Portable touchscreen device", "answer": "TABLET" },
+      { "clue": "Output device for visual display", "answer": "LMST" },
+      { "clue": "Central processing unit", "answer": "PHONE" },
+      { "clue": "Device used to print documents", "answer": "PRINTER" }
+    ]
+    ),
   }
 ];
 
-function generateGrid(template: string[][]): any[][] {
+function generateGrid(questions: any): any {
+  const puzzleGenerator = clg.generateLayout(questions);
+  console.log({ puzzleGenerator })
+  const clues = convertToCluesObject(puzzleGenerator?.result);
+  console.log({ sd: puzzleGenerator.table })
+  const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
+    return cur?.map((cur: string) => (cur === "-" ? "" : cur))
+  })
+  console.log({ dynamicTemplate })
   // First, find the maximum row length to ensure all rows have the same length
-  const maxLength = Math.max(...template.map(row => row.length));
+  const maxLength = Math.max(...dynamicTemplate.map(row => row.length));
 
   // Normalize the template so all rows have the same length
-  const normalizedTemplate = template.map(row => {
+  const normalizedTemplate = dynamicTemplate.map(row => {
     if (row.length < maxLength) {
       return [...row, ...Array(maxLength - row.length).fill("")];
     }
@@ -165,8 +173,9 @@ function generateGrid(template: string[][]): any[][] {
       };
     }
   }
+  console.log({ grid })
 
-  return grid;
+  return { grid, clues };
 }
 
 export function getPuzzleById(id: string): CrosswordPuzzle | undefined {
