@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { BookOpen, CheckCircle, Clock, Grid3X3, Target, PenTool, Check, Plus } from "lucide-react";
 import CreatePuzzleModal from "./CreatePuzzleModal";
+import { useRouter } from "next/navigation";
 
 interface PuzzleListProps {
   onSelectPuzzle: (puzzleId: string) => void;
@@ -18,10 +19,15 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
   const [showInstructions, setShowInstructions] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [puzzleList, setPuzzleList] = useState(puzzles);
+  const router = useRouter();
 
   const handleCreatePuzzle = (puzzleData: any) => {
     const newPuzzle = createPuzzle(puzzleData);
     setPuzzleList([...puzzleList, newPuzzle]);
+  };
+
+  const handlePlayClick = (puzzleId: string) => {
+    router.push(`/play/${puzzleId}`);
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -59,7 +65,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
             } cursor-pointer`}
             onMouseEnter={() => setHoveredPuzzle(puzzle.id)}
             onMouseLeave={() => setHoveredPuzzle(null)}
-            onClick={() => onSelectPuzzle(puzzle.id)}
+            onClick={() => handlePlayClick(puzzle.id)}
           >
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">
@@ -105,7 +111,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
               </Button>
               <Button 
                 className="bg-primary hover:bg-primary/90"
-                onClick={() => onSelectPuzzle(puzzle.id)}
+                onClick={() => handlePlayClick(puzzle.id)}
               >
                 Play Now
               </Button>
