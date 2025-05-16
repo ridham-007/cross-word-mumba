@@ -81,7 +81,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
         handleInput(e.key);
       } else if (e.key === 'Backspace') {
-        handleInput('');
+        handleBackspace();
       } else if (e.key === 'Tab' || e.key === 'Enter') {
         e.preventDefault();
         moveToNextCell();
@@ -159,6 +159,94 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
       }));
     }
   }, [userProgress, puzzle]);
+
+  // Move to previous cell
+  const moveToPreviousCell = useCallback(() => {
+    if (!userProgress.selectedCell || !puzzle) return;
+
+    const { row, col } = userProgress.selectedCell;
+    const { userGrid, selectedDirection } = userProgress;
+
+    let prevRow = row;
+    let prevCol = col;
+
+    if (selectedDirection === 'across') {
+      prevCol = col - 1;
+      while (prevCol >= 0 && userGrid[prevRow][prevCol].isBlack) {
+        prevCol--;
+      }
+
+      if (prevCol < 0) {
+        // Move to the previous row
+        prevRow--;
+        prevCol = userGrid[0].length - 1;
+
+        while (prevRow >= 0) {
+          while (prevCol >= 0) {
+            if (!userGrid[prevRow][prevCol].isBlack) {
+              break;
+            }
+            prevCol--;
+          }
+
+          if (prevCol >= 0) break;
+          prevRow--;
+          prevCol = userGrid[0].length - 1;
+        }
+      }
+    } else {
+      prevRow = row - 1;
+      while (prevRow >= 0 && userGrid[prevRow][prevCol].isBlack) {
+        prevRow--;
+      }
+
+      if (prevRow < 0) {
+        // Move to the previous column
+        prevCol--;
+        prevRow = userGrid.length - 1;
+
+        while (prevCol >= 0) {
+          while (prevRow >= 0) {
+            if (!userGrid[prevRow][prevCol].isBlack) {
+              break;
+            }
+            prevRow--;
+          }
+
+          if (prevRow >= 0) break;
+          prevCol--;
+          prevRow = userGrid.length - 1;
+        }
+      }
+    }
+
+    if (prevRow >= 0 && prevCol >= 0) {
+      setUserProgress(prev => ({
+        ...prev,
+        selectedCell: { row: prevRow, col: prevCol }
+      }));
+    }
+  }, [userProgress, puzzle]);
+
+  // Handle backspace
+  const handleBackspace = () => {
+    if (!userProgress.selectedCell) return;
+
+    const { row, col } = userProgress.selectedCell;
+    const newGrid = [...userProgress.userGrid];
+
+    // If current cell has input, clear it
+    if (newGrid[row][col].userInput) {
+      newGrid[row][col].userInput = '';
+      setUserProgress({
+        ...userProgress,
+        userGrid: newGrid
+      });
+    } else {
+      // If current cell is empty, move to previous cell
+      moveToPreviousCell();
+    }
+  };
 
   // Find the starting cell of a word
   const findWordStart = (row: number, col: number, direction: 'across' | 'down'): { row: number; col: number } => {
@@ -461,7 +549,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
 
           {isKeyboardVisible && (
             <div className="mt-4">
-              <CrosswordKeyboard onKeyPress={handleInput} />
+              <CrosswordKeyboard onKeyPress={handleInput} onBackspace={handleBackspace} />
             </div>
           )}
         </div>

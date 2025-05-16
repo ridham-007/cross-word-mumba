@@ -5,9 +5,10 @@ import { Delete } from "lucide-react";
 
 interface CrosswordKeyboardProps {
   onKeyPress: (key: string) => void;
+  onBackspace: () => void;
 }
 
-export default function CrosswordKeyboard({ onKeyPress }: CrosswordKeyboardProps) {
+export default function CrosswordKeyboard({ onKeyPress, onBackspace }: CrosswordKeyboardProps) {
   const keys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
@@ -39,7 +40,7 @@ export default function CrosswordKeyboard({ onKeyPress }: CrosswordKeyboardProps
           <Button
             variant="outline"
             className="h-10 sm:h-12 w-10 p-0"
-            onClick={() => onKeyPress('')}
+            onClick={onBackspace}
           >
             <Delete className="h-4 w-4" />
           </Button>
