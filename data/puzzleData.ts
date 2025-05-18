@@ -160,25 +160,16 @@ function generateGrid(questions: any): any {
 
   const grid: any[][] = [];
   let numberMap = new Map<string, number>();
-  let currentNumber = 1;
 
-  // First pass: identify starting positions
-  for (let i = 0; i < normalizedTemplate.length; i++) {
-    for (let j = 0; j < maxLength; j++) {
-      if (normalizedTemplate[i][j] !== "") {
-        const isStartOfAcross = (j === 0 || normalizedTemplate[i][j - 1] === "") && 
-                               (j + 1 < maxLength && normalizedTemplate[i][j + 1] !== "");
-        const isStartOfDown = (i === 0 || normalizedTemplate[i - 1][j] === "") && 
-                             (i + 1 < normalizedTemplate.length && normalizedTemplate[i + 1][j] !== "");
+  // Map clue numbers to their starting positions
+  clues.across.forEach(clue => {
+    numberMap.set(`${clue.row},${clue.col}`, clue.number);
+  });
+  clues.down.forEach(clue => {
+    numberMap.set(`${clue.row},${clue.col}`, clue.number);
+  });
 
-        if (isStartOfAcross || isStartOfDown) {
-          numberMap.set(`${i},${j}`, currentNumber++);
-        }
-      }
-    }
-  }
-
-  // Second pass: create grid with numbers only at starting positions
+  // Create grid with numbers only at clue starting positions
   for (let i = 0; i < normalizedTemplate.length; i++) {
     grid[i] = [];
     for (let j = 0; j < maxLength; j++) {
@@ -188,7 +179,7 @@ function generateGrid(questions: any): any {
         col: j,
         answer: cellValue,
         isBlack: cellValue === "",
-        number: numberMap.get(`${i},${j}`), // Only set numbers for starting positions
+        number: numberMap.get(`${i},${j}`), // Only set numbers for clue starting positions
         isRevealed: false,
         userInput: "",
         isHighlighted: false
