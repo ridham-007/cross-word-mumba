@@ -22,7 +22,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
   const router = useRouter();
 
   const handleCreatePuzzle = (puzzleData: any) => {
-    const newPuzzle = createPuzzle(puzzleData);
+    const newPuzzle: any = createPuzzle(puzzleData);
     setPuzzleList([...puzzleList, newPuzzle]);
   };
 
@@ -47,7 +47,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
       </div>
 
       <div className="flex justify-center mb-6">
-        <Button 
+        <Button
           onClick={() => setShowCreateModal(true)}
           className="bg-primary hover:bg-primary/90"
         >
@@ -58,11 +58,10 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {puzzleList.map((puzzle) => (
-          <Card 
+          <Card
             key={puzzle.id}
-            className={`transition-all duration-300 hover:shadow-lg ${
-              hoveredPuzzle === puzzle.id ? 'scale-[1.02]' : 'scale-100'
-            } cursor-pointer`}
+            className={`transition-all duration-300 hover:shadow-lg ${hoveredPuzzle === puzzle.id ? 'scale-[1.02]' : 'scale-100'
+              } cursor-pointer`}
             onMouseEnter={() => setHoveredPuzzle(puzzle.id)}
             onMouseLeave={() => setHoveredPuzzle(null)}
             onClick={() => handlePlayClick(puzzle.id)}
@@ -99,8 +98,8 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowInstructions(true);
@@ -109,7 +108,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                 <BookOpen className="mr-2 h-4 w-4" />
                 How to Play
               </Button>
-              <Button 
+              <Button
                 className="bg-primary hover:bg-primary/90"
                 onClick={() => handlePlayClick(puzzle.id)}
               >
@@ -130,7 +129,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
               Master the crossword puzzle with these simple instructions
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-6 py-4">
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
@@ -179,7 +178,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                   <div>
                     <h3 className="text-lg font-medium">Take Your Time</h3>
                     <p className="text-muted-foreground">
-                      There's no time limit - solve at your own pace. Use hints when needed and enjoy the challenge!
+                      {` There's no time limit - solve at your own pace. Use hints when needed and enjoy the challenge!`}
                     </p>
                   </div>
                 </div>
@@ -199,7 +198,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Don't be afraid to use the check feature to learn
+                  {` Don't be afraid to use the check feature to learn`}
                 </li>
               </ul>
             </div>

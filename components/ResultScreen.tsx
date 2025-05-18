@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, RotateCcw, Share2, Trophy } from "lucide-react";
-import { 
+import {
   FacebookShareButton,
   TwitterShareButton,
   WhatsappShareButton,
@@ -26,16 +26,16 @@ interface ResultScreenProps {
 export default function ResultScreen({ score, onPlayAgain, onBackToList }: ResultScreenProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const percentage = Math.round((score.correct / score.total) * 100);
-  
+
   // Show confetti after a small delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowConfetti(true);
     }, 300);
-    
+
     return () => clearTimeout(timer);
   }, []);
-  
+
   // Get the appropriate message and emoji based on score
   const getResultInfo = () => {
     if (percentage === 100) {
@@ -74,11 +74,11 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
   const resultInfo = getResultInfo();
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareTitle = `I scored ${percentage}% on this crossword puzzle! ${resultInfo.emoji}`;
-  
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
       {showConfetti && percentage > 50 && <Confetti />}
-      
+
       <Card className="w-full max-w-lg border-border animate-in fade-in slide-in-from-bottom-4 duration-500">
         <CardHeader className="text-center pb-2">
           <div className="text-6xl mb-4 animate-bounce">
@@ -88,12 +88,12 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
             {resultInfo.message}
           </CardTitle>
         </CardHeader>
-        
+
         <CardContent className="text-center space-y-8 pt-4">
           <p className="text-xl text-muted-foreground">
             {resultInfo.description}
           </p>
-          
+
           <div className="flex items-center justify-center">
             <div className="relative h-48 w-48">
               {/* Progress circle */}
@@ -107,7 +107,7 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
                   r="40"
                   fill="none"
                 ></circle>
-                
+
                 {/* Progress circle */}
                 <circle
                   className="text-primary stroke-current"
@@ -122,7 +122,7 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
                   transform="rotate(-90 50 50)"
                 ></circle>
               </svg>
-              
+
               {/* Percentage in the middle */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
@@ -138,21 +138,21 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
           <div className="space-y-4">
             <h3 className="font-medium text-muted-foreground">Share your result</h3>
             <div className="flex justify-center gap-4">
-              <FacebookShareButton url={shareUrl} quote={shareTitle}>
+              <FacebookShareButton url={shareUrl} title={shareTitle}>
                 <FacebookIcon size={40} round />
               </FacebookShareButton>
-              
+
               <TwitterShareButton url={shareUrl} title={shareTitle}>
                 <TwitterIcon size={40} round />
               </TwitterShareButton>
-              
+
               <WhatsappShareButton url={shareUrl} title={shareTitle}>
                 <WhatsappIcon size={40} round />
               </WhatsappShareButton>
             </div>
           </div>
         </CardContent>
-        
+
         <CardFooter className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-between">
           <Button
             variant="outline"
