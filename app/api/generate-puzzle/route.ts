@@ -6,8 +6,8 @@ const openai = new OpenAI({
 });
 
 const SYSTEM_PROMPT = `Create a crossword puzzle with the following requirements:
-- Generate 8-10 clues and answers
-- Answers should be single words
+- Generate a maximum of 8 clues and answers
+- All answers must be single words and no longer than 6 characters
 - Clues should be clear and appropriate for the difficulty level
 - Include a mix of easy and challenging clues
 - Format the response as a JSON object with:

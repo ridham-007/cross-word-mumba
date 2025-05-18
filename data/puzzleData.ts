@@ -160,16 +160,21 @@ function generateGrid(questions: any): any {
 
   const grid: any[][] = [];
   let numberMap = new Map<string, number>();
+  let currentNumber = 1;
 
-  // Map clue numbers to their starting positions
-  clues.across.forEach(clue => {
-    numberMap.set(`${clue.row},${clue.col}`, clue.number);
-  });
-  clues.down.forEach(clue => {
-    numberMap.set(`${clue.row},${clue.col}`, clue.number);
-  });
+  for (let i = 0; i < normalizedTemplate.length; i++) {
+    for (let j = 0; j < maxLength; j++) {
+      if (normalizedTemplate[i][j] !== "") {
+        const isStartOfAcross = j === 0 || normalizedTemplate[i][j - 1] === "";
+        const isStartOfDown = i === 0 || normalizedTemplate[i - 1][j] === "";
 
-  // Create grid with numbers only at clue starting positions
+        if (isStartOfAcross || isStartOfDown) {
+          numberMap.set(`${i},${j}`, currentNumber++);
+        }
+      }
+    }
+  }
+
   for (let i = 0; i < normalizedTemplate.length; i++) {
     grid[i] = [];
     for (let j = 0; j < maxLength; j++) {
@@ -179,7 +184,7 @@ function generateGrid(questions: any): any {
         col: j,
         answer: cellValue,
         isBlack: cellValue === "",
-        number: numberMap.get(`${i},${j}`), // Only set numbers for clue starting positions
+        number: numberMap.get(`${i},${j}`),
         isRevealed: false,
         userInput: "",
         isHighlighted: false
