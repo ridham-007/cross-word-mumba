@@ -97,8 +97,8 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
+            <CardFooter className="flex justify-end">
+              {/* <Button
                 variant="outline"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -107,7 +107,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
               >
                 <BookOpen className="mr-2 h-4 w-4" />
                 How to Play
-              </Button>
+              </Button> */}
               <Button
                 className="bg-primary hover:bg-primary/90"
                 onClick={() => handlePlayClick(puzzle.id)}
