@@ -29,40 +29,35 @@ export default function CrosswordClues({
 
   // Update active clue when selected cell changes
   useEffect(() => {
-    if (!selectedCell || !grid.length) return;
+  if (!selectedCell || !grid.length) return;
 
-    const { row, col } = selectedCell;
-    const cell = grid[row][col];
+  const { row, col } = selectedCell;
 
-    if (cell.isBlack) return;
-
-    // Find the starting cell of the word
-    if (selectedDirection === 'across') {
-      // Find the leftmost cell of the word
-      let startCol = col;
-      while (startCol > 0 && !grid[row][startCol - 1].isBlack) {
-        startCol--;
-      }
-
-      const startCell = grid[row][startCol];
-      const matchingClue = clues.across.find(c => c.number === startCell.number);
-      if (matchingClue) {
-        setActiveClue(matchingClue);
-      }
-    } else {
-      // Find the topmost cell of the word
-      let startRow = row;
-      while (startRow > 0 && !grid[startRow - 1][col].isBlack) {
-        startRow--;
-      }
-
-      const startCell = grid[startRow][col];
-      const matchingClue = clues.down.find(c => c.number === startCell.number);
-      if (matchingClue) {
-        setActiveClue(matchingClue);
-      }
+  if (selectedDirection === "across") {
+    // Go left to find the start of the word
+    let startCol = col;
+    while (startCol > 0 && !grid[row][startCol].isBlack && !grid[row][startCol - 1].isBlack) {
+      startCol--;
     }
-  }, [selectedCell, selectedDirection, grid, clues]);
+
+    const clue = clues.across.find(
+      (clue) => clue.row === row && clue.col === startCol && clue.direction === "across"
+    );
+    if (clue) setActiveClue(clue);
+  } else {
+    // Go up to find the start of the word
+    let startRow = row;
+    while (startRow > 0 && !grid[startRow][col].isBlack && !grid[startRow - 1][col].isBlack) {
+      startRow--;
+    }
+
+    const clue = clues.down.find(
+      (clue) => clue.row === startRow && clue.col === col && clue.direction === "down"
+    );
+    if (clue) setActiveClue(clue);
+  }
+}, [selectedCell, selectedDirection, grid, clues]);
+
 
   // Check if a word is complete
   const isClueComplete = (clue: Clue) => {
@@ -211,7 +206,7 @@ export default function CrosswordClues({
                   key={`down-${clue.number}`}
                   className={cn(
                     "w-full p-4 text-left transition-colors hover:bg-muted/50 relative",
-                    activeClue?.number === clue.number && activeClue?.direction === 'down'
+                     activeClue?.number === clue.number && activeClue?.direction === clue.direction
                       ? "bg-blue-500/10 text-blue-400"
                       : "",
                     isClueComplete(clue)

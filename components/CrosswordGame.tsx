@@ -270,18 +270,19 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   };
 
   // Handle cell selection
-  const handleCellSelect = (row: number, col: number) => {
+  const handleCellSelect = (row: number, col: number, overrideDirection?: 'across' | 'down') => {
     if (!puzzle) return;
 
     const { userGrid, selectedCell, selectedDirection } = userProgress;
 
+    const direction = overrideDirection ?? selectedDirection;
+
     if (userGrid[row][col].isBlack) return;
 
-    let newDirection = selectedDirection;
+    let newDirection = direction;
 
-    // Toggle direction if selecting the same cell
     if (selectedCell?.row === row && selectedCell?.col === col) {
-      newDirection = selectedDirection === 'across' ? 'down' : 'across';
+      newDirection = direction === 'across' ? 'down' : 'across';
     }
 
     // Find the word boundaries and highlight cells
@@ -458,12 +459,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   const handleClueSelect = (clue: Clue) => {
     if (!puzzle) return;
 
-    // Find the starting cell of the clue
-    handleCellSelect(clue.row, clue.col);
-    setUserProgress(prev => ({
-      ...prev,
-      selectedDirection: clue.direction
-    }));
+    handleCellSelect(clue.row, clue.col, clue.direction);
   };
 
   if (!puzzle) {

@@ -28,19 +28,23 @@ interface CluesOutput {
   down: ClueFormatted[];
 }
 
-function convertToCluesObject(clueArray: ClueInput[]): CluesOutput {
+function convertToCluesObject(clueArray: ClueInput[], numberMap: Map<string, number>): CluesOutput {
   const clues: CluesOutput = {
     across: [],
     down: []
   };
 
   clueArray.forEach((item) => {
+    const row = item.starty - 1;
+    const col = item.startx - 1;
+    const number = numberMap.get(`${row},${col}`) || item.position;
+
     const formatted: ClueFormatted = {
-      number: item.position,
+      number,
       text: item.clue,
       answer: item.answer,
-      row: item.starty - 1,
-      col: item.startx - 1,
+      row,
+      col,
       direction: item.orientation
     };
 
@@ -50,6 +54,10 @@ function convertToCluesObject(clueArray: ClueInput[]): CluesOutput {
       clues.down.push(formatted);
     }
   });
+
+  // Optional: sort clues by number
+  clues.across.sort((a, b) => a.number - b.number);
+  clues.down.sort((a, b) => a.number - b.number);
 
   return clues;
 }
@@ -144,7 +152,7 @@ function generatePuzzles(puzzleData: any[]): CrosswordPuzzle[] {
 
 function generateGrid(questions: any): any {
   const puzzleGenerator = clg.generateLayout(questions);
-  const clues = convertToCluesObject(puzzleGenerator?.result);
+  // const clues = convertToCluesObject(puzzleGenerator?.result);
   const dynamicTemplate: string[][] = puzzleGenerator.table?.map((cur: string[]) => {
     return cur?.map((cur: string) => (cur === "-" ? "" : cur))
   });
@@ -191,6 +199,9 @@ function generateGrid(questions: any): any {
       };
     }
   }
+
+  const clues = convertToCluesObject(puzzleGenerator.result, numberMap);
+
   return { grid, clues };
 }
 
