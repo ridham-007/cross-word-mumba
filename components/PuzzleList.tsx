@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Play, Calendar, Users, FileText, Plus, Brain, Trophy, Target, Clock } from "lucide-react";
 import CreatePuzzleModal from "./CreatePuzzleModal";
 import { useRouter } from "next/navigation";
-import { Progress } from "@/components/ui/progress";
 
 interface PuzzleListProps {
   onSelectPuzzle: (puzzleId: string) => void;
@@ -38,7 +37,6 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           bgColor: 'bg-emerald-500',
           gradientBg: 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10',
           level: 'Beginner Friendly',
-          progress: 33,
           description: 'Perfect for those new to crosswords'
         };
       case 'medium':
@@ -48,7 +46,6 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           bgColor: 'bg-amber-500',
           gradientBg: 'bg-gradient-to-r from-amber-500/10 to-orange-500/10',
           level: 'Intermediate',
-          progress: 66,
           description: 'Challenging but manageable'
         };
       case 'hard':
@@ -58,7 +55,6 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           bgColor: 'bg-rose-500',
           gradientBg: 'bg-gradient-to-r from-rose-500/10 to-red-500/10',
           level: 'Expert',
-          progress: 100,
           description: 'For seasoned puzzle solvers'
         };
       default:
@@ -68,7 +64,6 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           bgColor: 'bg-blue-500',
           gradientBg: 'bg-gradient-to-r from-blue-500/10 to-indigo-500/10',
           level: 'Unknown',
-          progress: 50,
           description: 'Difficulty level not specified'
         };
     }
@@ -113,14 +108,9 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                       <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
                       <CardDescription className="text-base">{puzzle.description}</CardDescription>
                     </div>
-                    <div className="flex flex-col items-start sm:items-end gap-2">
-                      <Badge className={`bg-gradient-to-r ${difficultyInfo.color} text-white`}>
-                        {puzzle.difficulty.toUpperCase()}
-                      </Badge>
-                      <div className="w-full sm:w-32">
-                        <Progress value={difficultyInfo.progress} className={`h-2 [&>div]:bg-gradient-to-r ${difficultyInfo.color}`} />
-                      </div>
-                    </div>
+                    <Badge className={`bg-gradient-to-r ${difficultyInfo.color} text-white`}>
+                      {puzzle.difficulty.toUpperCase()}
+                    </Badge>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
