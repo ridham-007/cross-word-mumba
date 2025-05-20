@@ -1,9 +1,10 @@
+```tsx
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Brain, Loader2, Sparkles, Wand2 } from "lucide-react";
 import LoadingSteps from "./LoadingSteps";
 
 interface CreatePuzzleModalProps {
@@ -16,19 +17,18 @@ const LOADING_STEPS = [
   {
     title: "Analyzing prompt",
     description: "Processing your request and understanding the theme",
+    icon: Brain
   },
   {
     title: "Generating clues",
     description: "Creating engaging crossword clues and answers",
+    icon: Sparkles
   },
   {
     title: "Building puzzle",
     description: "Arranging clues into a crossword layout",
-  },
-  {
-    title: "Finalizing",
-    description: "Preparing the puzzle for you to solve",
-  },
+    icon: Wand2
+  }
 ];
 
 export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }: CreatePuzzleModalProps) {
@@ -64,11 +64,6 @@ export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       const puzzleData = await response.json();
-
-      // Step 4: Finalizing
-      setCurrentStep(3);
-      await new Promise(resolve => setTimeout(resolve, 500));
-
       onCreatePuzzle(puzzleData);
       onOpenChange(false);
       setPrompt("");
@@ -82,47 +77,70 @@ export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Create New Puzzle</DialogTitle>
-          <DialogDescription>
-            Enter a topic or theme for your crossword puzzle and we'll generate it for you.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="sm:max-w-[500px] p-0">
+        <div className="p-6 bg-[#00e5e5]/5 border-b">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-[#00e5e5] flex items-center gap-2">
+              <Wand2 className="h-5 w-5" />
+              Create New Puzzle
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              Enter a topic or theme and let AI generate a custom crossword puzzle for you.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
 
         {!isLoading ? (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="prompt">Puzzle Topic</Label>
+              <Label htmlFor="prompt" className="text-base font-medium">
+                Puzzle Topic
+              </Label>
               <Input
                 id="prompt"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="e.g., Create a puzzle about Indian culture"
+                className="h-12"
                 required
                 disabled={isLoading}
               />
+              <p className="text-sm text-muted-foreground">
+                Be specific about the theme and difficulty level you want.
+              </p>
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button 
                 type="button" 
-                variant="outline" 
+                variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={isLoading}
+                className="w-full sm:w-auto order-2 sm:order-1"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
+                className="w-full sm:w-auto order-1 sm:order-2 bg-[#00e5e5] hover:bg-[#00e5e5]/90"
               >
-                Create Puzzle
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="mr-2 h-4 w-4" />
+                    Generate Puzzle
+                  </>
+                )}
               </Button>
             </div>
           </form>
         ) : (
-          <div className="py-6">
+          <div className="p-6">
             <LoadingSteps steps={LOADING_STEPS} currentStep={currentStep} />
           </div>
         )}
@@ -130,3 +148,4 @@ export default function CreatePuzzleModal({ open, onOpenChange, onCreatePuzzle }
     </Dialog>
   );
 }
+```
