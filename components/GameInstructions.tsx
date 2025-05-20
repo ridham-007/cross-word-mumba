@@ -30,28 +30,40 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
     switch (difficulty) {
       case 'easy':
         return {
-          color: 'bg-green-500',
+          color: 'from-emerald-400 to-teal-500',
+          textColor: 'text-emerald-500',
+          bgColor: 'bg-emerald-500',
+          gradientBg: 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10',
           level: 'Beginner Friendly',
           progress: 33,
           description: 'Perfect for those new to crosswords'
         };
       case 'medium':
         return {
-          color: 'bg-yellow-500',
+          color: 'from-amber-400 to-orange-500',
+          textColor: 'text-amber-500',
+          bgColor: 'bg-amber-500',
+          gradientBg: 'bg-gradient-to-r from-amber-500/10 to-orange-500/10',
           level: 'Intermediate',
           progress: 66,
           description: 'Challenging but manageable'
         };
       case 'hard':
         return {
-          color: 'bg-red-500',
+          color: 'from-rose-400 to-red-500',
+          textColor: 'text-rose-500',
+          bgColor: 'bg-rose-500',
+          gradientBg: 'bg-gradient-to-r from-rose-500/10 to-red-500/10',
           level: 'Expert',
           progress: 100,
           description: 'For seasoned puzzle solvers'
         };
       default:
         return {
-          color: 'bg-blue-500',
+          color: 'from-blue-400 to-indigo-500',
+          textColor: 'text-blue-500',
+          bgColor: 'bg-blue-500',
+          gradientBg: 'bg-gradient-to-r from-blue-500/10 to-indigo-500/10',
           level: 'Unknown',
           progress: 50,
           description: 'Difficulty level not specified'
@@ -69,25 +81,25 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             onClick={onBack}
             variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="rounded-full hover:bg-primary/10"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <Badge className={difficultyInfo.color}>
+          <Badge className={`bg-gradient-to-r ${difficultyInfo.color} text-white`}>
             {puzzle.difficulty.toUpperCase()}
           </Badge>
         </div>
 
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">{puzzle.title}</h1>
+          <h1 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">{puzzle.title}</h1>
           <p className="text-xl text-muted-foreground">{puzzle.description}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="bg-card/50 backdrop-blur">
+          <Card className={`${difficultyInfo.gradientBg} border-none shadow-xl`}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-primary" />
+                <Brain className={`h-5 w-5 ${difficultyInfo.textColor}`} />
                 Puzzle Overview
               </CardTitle>
             </CardHeader>
@@ -95,16 +107,16 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Difficulty Level</span>
-                  <span className="font-medium">{difficultyInfo.level}</span>
+                  <span className={`font-medium ${difficultyInfo.textColor}`}>{difficultyInfo.level}</span>
                 </div>
-                <Progress value={difficultyInfo.progress} className="h-2" />
+                <Progress value={difficultyInfo.progress} className={`h-2 [&>div]:bg-gradient-to-r ${difficultyInfo.color}`} />
                 <p className="text-sm text-muted-foreground">{difficultyInfo.description}</p>
               </div>
 
               <div className="grid gap-4">
-                <div className="flex items-center justify-between rounded-lg bg-secondary/50 p-3">
+                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-primary" />
+                    <Clock className={difficultyInfo.textColor} />
                     <span>Estimated Time</span>
                   </div>
                   <span className="font-medium">
@@ -114,9 +126,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between rounded-lg bg-secondary/50 p-3">
+                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
                   <div className="flex items-center gap-2">
-                    <Trophy className="h-4 w-4 text-primary" />
+                    <Trophy className={difficultyInfo.textColor} />
                     <span>Total Clues</span>
                   </div>
                   <span className="font-medium">
@@ -124,9 +136,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between rounded-lg bg-secondary/50 p-3">
+                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
                   <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-primary" />
+                    <Target className={difficultyInfo.textColor} />
                     <span>Grid Size</span>
                   </div>
                   <span className="font-medium">
@@ -137,7 +149,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             </CardContent>
           </Card>
 
-          <Card className="bg-card/50 backdrop-blur">
+          <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 border-none shadow-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-primary" />
@@ -145,8 +157,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                <div className="rounded-full bg-primary/10 p-2">
+              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="rounded-full bg-primary/20 p-2">
                   <PenTool className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -155,8 +167,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                <div className="rounded-full bg-primary/10 p-2">
+              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="rounded-full bg-primary/20 p-2">
                   <Check className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -165,8 +177,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                <div className="rounded-full bg-primary/10 p-2">
+              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="rounded-full bg-primary/20 p-2">
                   <Target className="h-4 w-4 text-primary" />
                 </div>
                 <div>
@@ -182,7 +194,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           <Button
             variant="outline"
             onClick={() => setShowInstructions(true)}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto border-primary/20 hover:bg-primary/10"
           >
             <HelpCircle className="mr-2 h-4 w-4" />
             How to Play
@@ -190,7 +202,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           <Button
             onClick={onStart}
             size="lg"
-            className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+            className={`w-full sm:w-auto bg-gradient-to-r ${difficultyInfo.color} text-white hover:opacity-90 transition-opacity`}
           >
             Start Playing
           </Button>
@@ -209,8 +221,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
               <div className="space-y-4">
                 <h3 className="font-semibold">Basic Controls</h3>
                 <div className="grid gap-4 text-sm">
-                  <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                    <div className="rounded-full bg-primary/10 p-2">
+                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                    <div className="rounded-full bg-primary/20 p-2">
                       <Target className="h-4 w-4 text-primary" />
                     </div>
                     <div>
@@ -219,8 +231,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                    <div className="rounded-full bg-primary/10 p-2">
+                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                    <div className="rounded-full bg-primary/20 p-2">
                       <PenTool className="h-4 w-4 text-primary" />
                     </div>
                     <div>
@@ -229,8 +241,8 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-lg bg-secondary/50 p-3">
-                    <div className="rounded-full bg-primary/10 p-2">
+                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                    <div className="rounded-full bg-primary/20 p-2">
                       <Check className="h-4 w-4 text-primary" />
                     </div>
                     <div>
