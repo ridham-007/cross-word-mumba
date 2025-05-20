@@ -83,7 +83,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                   <div className="flex items-center gap-3">
                     <CardTitle className="text-2xl font-bold">{puzzle.title}</CardTitle>
                     <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
-                      {getDifficultyIcon(puzzle.difficulty)} {puzzle.difficulty}
+                      {getDifficultyIcon(difficulty)} {puzzle.difficulty}
                     </Badge>
                   </div>
                   <CardDescription className="text-muted-foreground text-base">
