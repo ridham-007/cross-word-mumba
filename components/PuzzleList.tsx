@@ -104,14 +104,21 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                 onMouseLeave={() => setHoveredPuzzle(null)}
               >
                 <div className="p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                      <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
-                      <CardDescription className="text-base">{puzzle.description}</CardDescription>
+                  <div className="flex flex-col gap-4 mb-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <CardTitle className="text-2xl font-bold">{puzzle.title}</CardTitle>
+                          <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor} hidden sm:inline-flex`}>
+                            {puzzle.difficulty.toUpperCase()}
+                          </Badge>
+                        </div>
+                        <CardDescription className="text-base mt-2">{puzzle.description}</CardDescription>
+                      </div>
+                      <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor} sm:hidden ml-2 shrink-0`}>
+                        {puzzle.difficulty.toUpperCase()}
+                      </Badge>
                     </div>
-                    <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor}`}>
-                      {puzzle.difficulty.toUpperCase()}
-                    </Badge>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
