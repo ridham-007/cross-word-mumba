@@ -63,51 +63,46 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
             } cursor-pointer border-border bg-card`}
             onMouseEnter={() => setHoveredPuzzle(puzzle.id)}
             onMouseLeave={() => setHoveredPuzzle(null)}
-            onClick={() => handlePlayClick(puzzle.id)}
           >
-            <div className="flex flex-col md:flex-row md:items-center">
-              <div className="flex-1 p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
-                    <CardDescription className="text-muted-foreground text-base">
-                      {puzzle.description}
-                    </CardDescription>
-                  </div>
-                  <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
-                    {puzzle.difficulty}
-                  </Badge>
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground text-base">
+                    {puzzle.description}
+                  </CardDescription>
                 </div>
+                <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
+                  {puzzle.difficulty}
+                </Badge>
+              </div>
 
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <FileText className="h-4 w-4" />
-                    <span>{puzzle.clues.across.length + puzzle.clues.down.length} clues</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>~{puzzle.difficulty === 'easy' ? 5 : puzzle.difficulty === 'medium' ? 10 : 15} mins</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Users className="h-4 w-4" />
-                    <span>
-                      {puzzle.difficulty === 'easy' ? 'Beginner' : 
-                       puzzle.difficulty === 'medium' ? 'Intermediate' : 
-                       'Expert'}
-                    </span>
-                  </div>
+              <div className="grid grid-cols-3 gap-6 mb-6">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <FileText className="h-4 w-4" />
+                  <span>{puzzle.clues.across.length + puzzle.clues.down.length} clues</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4" />
+                  <span>~{puzzle.difficulty === 'easy' ? 5 : puzzle.difficulty === 'medium' ? 10 : 15} mins</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Users className="h-4 w-4" />
+                  <span>
+                    {puzzle.difficulty === 'easy' ? 'Beginner' : 
+                     puzzle.difficulty === 'medium' ? 'Intermediate' : 
+                     'Expert'}
+                  </span>
                 </div>
               </div>
 
-              <div className="p-6 md:pl-0 md:pr-6 flex items-center">
-                <Button 
-                  className="w-full md:w-auto bg-primary/10 hover:bg-primary/20 text-primary"
-                  onClick={() => handlePlayClick(puzzle.id)}
-                >
-                  <Play className="mr-2 h-4 w-4" />
-                  Start Challenge
-                </Button>
-              </div>
+              <Button 
+                className="bg-primary/10 hover:bg-primary/20 text-primary"
+                onClick={() => handlePlayClick(puzzle.id)}
+              >
+                <Play className="mr-2 h-4 w-4" />
+                Start Challenge
+              </Button>
             </div>
 
             <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-background/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
