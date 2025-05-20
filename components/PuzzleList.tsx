@@ -5,7 +5,7 @@ import { puzzles, createPuzzle } from "@/data/puzzleData";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Play, Calendar, Users, FileText, Plus, Brain, Trophy, Target } from "lucide-react";
+import { Play, Calendar, Users, FileText, Plus, Brain, Trophy, Target, Clock } from "lucide-react";
 import CreatePuzzleModal from "./CreatePuzzleModal";
 import { useRouter } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
