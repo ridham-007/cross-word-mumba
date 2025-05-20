@@ -5,7 +5,7 @@ import { puzzles, createPuzzle } from "@/data/puzzleData";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Play, Calendar, Users, FileText, Plus, Trophy } from "lucide-react";
+import { Play, Calendar, Users, FileText, Plus } from "lucide-react";
 import CreatePuzzleModal from "./CreatePuzzleModal";
 import { useRouter } from "next/navigation";
 
@@ -37,104 +37,77 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
     }
   };
 
-  const getDifficultyIcon = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy': return '🌟';
-      case 'medium': return '⭐⭐';
-      case 'hard': return '⭐⭐⭐';
-      default: return '⭐';
-    }
-  };
-
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-4">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
-          Crossword Puzzle Challenge
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Test your knowledge and challenge yourself with our collection of engaging crossword puzzles
-        </p>
+    <div className="space-y-8 max-w-4xl mx-auto">
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl font-bold text-primary">Crossword Puzzle</h1>
+        <p className="text-xl text-muted-foreground">Choose a puzzle and challenge yourself!</p>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-center mb-6">
         <Button
           onClick={() => setShowCreateModal(true)}
-          className="bg-primary/10 hover:bg-primary/20 text-primary"
+          className="bg-primary hover:bg-primary/90"
         >
           <Plus className="mr-2 h-4 w-4" />
           Create New Puzzle
         </Button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {puzzleList.map((puzzle) => (
           <Card
             key={puzzle.id}
-            className={`group relative overflow-hidden transition-all duration-300 hover:shadow-xl ${
+            className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
               hoveredPuzzle === puzzle.id ? 'scale-[1.01]' : 'scale-100'
-            } cursor-pointer border-border/50 hover:border-primary/50`}
+            } cursor-pointer border-border bg-card`}
             onMouseEnter={() => setHoveredPuzzle(puzzle.id)}
             onMouseLeave={() => setHoveredPuzzle(null)}
+            onClick={() => handlePlayClick(puzzle.id)}
           >
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-6">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <CardTitle className="text-2xl font-bold">{puzzle.title}</CardTitle>
-                    <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
-                      {getDifficultyIcon(difficulty)} {puzzle.difficulty}
-                    </Badge>
-                  </div>
-                  <CardDescription className="text-muted-foreground text-base">
-                    {puzzle.description}
-                  </CardDescription>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-3">
-                  <div className="bg-primary/10 rounded-full p-2">
-                    <FileText className="h-5 w-5 text-primary" />
-                  </div>
+            <div className="flex flex-col md:flex-row md:items-center">
+              <div className="flex-1 p-6">
+                <div className="flex items-start justify-between mb-4">
                   <div>
-                    <p className="text-sm font-medium">Total Clues</p>
-                    <p className="text-2xl font-bold">{puzzle.clues.across.length + puzzle.clues.down.length}</p>
+                    <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
+                    <CardDescription className="text-muted-foreground text-base">
+                      {puzzle.description}
+                    </CardDescription>
                   </div>
+                  <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
+                    {puzzle.difficulty}
+                  </Badge>
                 </div>
 
-                <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-3">
-                  <div className="bg-primary/10 rounded-full p-2">
-                    <Calendar className="h-5 w-5 text-primary" />
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <FileText className="h-4 w-4" />
+                    <span>{puzzle.clues.across.length + puzzle.clues.down.length} clues</span>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium">Est. Time</p>
-                    <p className="text-2xl font-bold">{puzzle.difficulty === 'easy' ? '5' : puzzle.difficulty === 'medium' ? '10' : '15'}m</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span>~{puzzle.difficulty === 'easy' ? 5 : puzzle.difficulty === 'medium' ? 10 : 15} mins</span>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-3">
-                  <div className="bg-primary/10 rounded-full p-2">
-                    <Trophy className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Skill Level</p>
-                    <p className="text-2xl font-bold">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Users className="h-4 w-4" />
+                    <span>
                       {puzzle.difficulty === 'easy' ? 'Beginner' : 
                        puzzle.difficulty === 'medium' ? 'Intermediate' : 
                        'Expert'}
-                    </p>
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <Button 
-                className="bg-primary hover:bg-primary/90"
-                onClick={() => handlePlayClick(puzzle.id)}
-              >
-                <Play className="mr-2 h-4 w-4" />
-                Start Challenge
-              </Button>
+              <div className="p-6 md:pl-0 md:pr-6 flex items-center">
+                <Button 
+                  className="w-full md:w-auto bg-primary/10 hover:bg-primary/20 text-primary"
+                  onClick={() => handlePlayClick(puzzle.id)}
+                >
+                  <Play className="mr-2 h-4 w-4" />
+                  Start Challenge
+                </Button>
+              </div>
             </div>
 
             <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-background/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
