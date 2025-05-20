@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
 import { getPuzzleById } from "@/data/puzzleData";
 import { Cell, Clue } from "@/types/crossword";
@@ -22,7 +20,13 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   const puzzle = getPuzzleById(puzzleId);
   const { toast } = useToast();
 
-  const [userProgress, setUserProgress] = useState<UserProgress>({
+  const [userProgress, setUserProgress] = useState<{
+    userGrid: Cell[][];
+    selectedCell: { row: number; col: number } | null;
+    selectedDirection: 'across' | 'down';
+    isCompleted: boolean;
+    checkedCells: boolean[][];
+  }>({
     userGrid: [],
     selectedCell: null,
     selectedDirection: 'across',
