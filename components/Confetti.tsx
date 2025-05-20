@@ -8,15 +8,14 @@ export default function Confetti() {
   useEffect(() => {
     // Create confetti pieces
     const colors = [
-      "#f44336", "#e91e63", "#9c27b0", "#673ab7",
-      "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4",
-      "#009688", "#4caf50", "#8bc34a", "#cddc39",
-      "#ffeb3b", "#ffc107", "#ff9800", "#ff5722",
+      "#00e5e5", "#00bcd4", "#03a9f4", "#2196f3",
+      "#3f51b5", "#673ab7", "#9c27b0", "#e91e63",
+      "#f44336", "#ff9800", "#ffc107", "#ffeb3b",
     ];
     
     const createPieces = () => {
       const newPieces: JSX.Element[] = [];
-      const numPieces = 100;
+      const numPieces = 150;
       
       for (let i = 0; i < numPieces; i++) {
         const color = colors[Math.floor(Math.random() * colors.length)];
@@ -32,7 +31,7 @@ export default function Confetti() {
         newPieces.push(
           <div
             key={i}
-            className="absolute z-10"
+            className="absolute z-[9999]"
             style={{
               left: `${x}%`,
               top: `${y}%`,
