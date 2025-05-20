@@ -94,7 +94,7 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
       <Card className="w-full max-w-2xl border-[#00e5e5]/20 bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00e5e5] to-transparent" />
-          
+
           <CardHeader className="text-center pb-2 pt-8">
             <div className="mx-auto mb-6 relative">
               <div className={cn("w-20 h-20 rounded-full flex items-center justify-center", resultInfo.bgColor)}>
@@ -156,8 +156,8 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
                 <CardContent className="p-4 pt-0">
                   <div className="text-2xl font-bold">
                     {percentage >= 90 ? "Expert" :
-                     percentage >= 70 ? "Advanced" :
-                     percentage >= 50 ? "Intermediate" : "Beginner"}
+                      percentage >= 70 ? "Advanced" :
+                        percentage >= 50 ? "Intermediate" : "Beginner"}
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Your skill level
@@ -172,7 +172,7 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
                 <h3 className="font-medium">Share your achievement</h3>
               </div>
               <div className="flex justify-center gap-4">
-                <FacebookShareButton url={shareUrl} quote={shareTitle}>
+                <FacebookShareButton url={shareUrl} title={shareTitle}>
                   <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
                     <FacebookIcon size={40} round />
                   </div>
