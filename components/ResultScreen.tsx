@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, RotateCcw, Share2, Trophy } from "lucide-react";
+import { ArrowLeft, RotateCcw, Share2, Trophy, Star, Target, Clock } from "lucide-react";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -13,11 +13,13 @@ import {
   WhatsappIcon
 } from 'react-share';
 import Confetti from "@/components/Confetti";
+import { formatTime } from "@/lib/utils";
 
 interface ResultScreenProps {
   score: {
     correct: number;
     total: number;
+    timeTaken?: number;
   };
   onPlayAgain: () => void;
   onBackToList: () => void;
@@ -27,7 +29,6 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
   const [showConfetti, setShowConfetti] = useState(false);
   const percentage = Math.round((score.correct / score.total) * 100);
 
-  // Show confetti after a small delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowConfetti(true);
@@ -36,37 +37,46 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
     return () => clearTimeout(timer);
   }, []);
 
-  // Get the appropriate message and emoji based on score
   const getResultInfo = () => {
     if (percentage === 100) {
       return {
         emoji: "🏆",
-        message: "Perfect! You're a crossword master!",
-        description: "Absolutely brilliant! Every answer correct!"
+        icon: Trophy,
+        message: "Perfect Score!",
+        description: "Absolutely brilliant! You're a crossword master!",
+        color: "text-yellow-500",
+        bgColor: "bg-yellow-500/10",
+        borderColor: "border-yellow-500"
       };
     } else if (percentage >= 80) {
       return {
         emoji: "🌟",
-        message: "Amazing job!",
-        description: "You're really good at this!"
+        icon: Star,
+        message: "Amazing Job!",
+        description: "Outstanding performance! Keep up the great work!",
+        color: "text-[#00e5e5]",
+        bgColor: "bg-[#00e5e5]/10",
+        borderColor: "border-[#00e5e5]"
       };
     } else if (percentage >= 60) {
       return {
         emoji: "👏",
-        message: "Good work!",
-        description: "You're making great progress!"
-      };
-    } else if (percentage >= 40) {
-      return {
-        emoji: "💪",
-        message: "Nice effort!",
-        description: "Keep practicing, you're getting better!"
+        icon: Target,
+        message: "Well Done!",
+        description: "Good effort! You're making great progress!",
+        color: "text-purple-500",
+        bgColor: "bg-purple-500/10",
+        borderColor: "border-purple-500"
       };
     } else {
       return {
-        emoji: "🎯",
-        message: "Keep going!",
-        description: "Every puzzle makes you stronger!"
+        emoji: "💪",
+        icon: Target,
+        message: "Keep Going!",
+        description: "Practice makes perfect! Try again and improve your score!",
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+        borderColor: "border-blue-500"
       };
     }
   };
@@ -75,101 +85,134 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareTitle = `I scored ${percentage}% on this crossword puzzle! ${resultInfo.emoji}`;
 
+  const Icon = resultInfo.icon;
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
-      {showConfetti && percentage > 50 && <Confetti />}
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
+      {showConfetti && percentage >= 60 && <Confetti />}
 
-      <Card className="w-full max-w-lg border-border animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <CardHeader className="text-center pb-2">
-          <div className="text-6xl mb-4 animate-bounce">
-            {resultInfo.emoji}
-          </div>
-          <CardTitle className="text-3xl font-bold">
-            {resultInfo.message}
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent className="text-center space-y-8 pt-4">
-          <p className="text-xl text-muted-foreground">
-            {resultInfo.description}
-          </p>
-
-          <div className="flex items-center justify-center">
-            <div className="relative h-48 w-48">
-              {/* Progress circle */}
-              <svg className="w-full h-full" viewBox="0 0 100 100">
-                {/* Background circle */}
-                <circle
-                  className="text-muted stroke-current"
-                  strokeWidth="10"
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                ></circle>
-
-                {/* Progress circle */}
-                <circle
-                  className="text-primary stroke-current"
-                  strokeWidth="10"
-                  strokeLinecap="round"
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                  strokeDasharray="251.2"
-                  strokeDashoffset={251.2 - (251.2 * percentage) / 100}
-                  transform="rotate(-90 50 50)"
-                ></circle>
-              </svg>
-
-              {/* Percentage in the middle */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-4xl font-bold">{percentage}%</span>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {score.correct} / {score.total}
-                  </div>
-                </div>
+      <Card className="w-full max-w-2xl border-[#00e5e5]/20 bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00e5e5] to-transparent" />
+          
+          <CardHeader className="text-center pb-2 pt-8">
+            <div className="mx-auto mb-6 relative">
+              <div className={cn("w-20 h-20 rounded-full flex items-center justify-center", resultInfo.bgColor)}>
+                <Icon className={cn("w-10 h-10", resultInfo.color)} />
+              </div>
+              <div className="absolute -right-2 -top-2 text-4xl animate-bounce">
+                {resultInfo.emoji}
               </div>
             </div>
-          </div>
+            <CardTitle className={cn("text-3xl font-bold mb-2", resultInfo.color)}>
+              {resultInfo.message}
+            </CardTitle>
+            <p className="text-xl text-muted-foreground">
+              {resultInfo.description}
+            </p>
+          </CardHeader>
 
-          <div className="space-y-4">
-            <h3 className="font-medium text-muted-foreground">Share your result</h3>
-            <div className="flex justify-center gap-4">
-              <FacebookShareButton url={shareUrl} title={shareTitle}>
-                <FacebookIcon size={40} round />
-              </FacebookShareButton>
+          <CardContent className="space-y-8 pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className={cn("border", resultInfo.borderColor)}>
+                <CardHeader className="p-4">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="w-4 h-4" />
+                    Accuracy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-2xl font-bold">{percentage}%</div>
+                  <p className="text-sm text-muted-foreground">
+                    {score.correct} of {score.total} correct
+                  </p>
+                </CardContent>
+              </Card>
 
-              <TwitterShareButton url={shareUrl} title={shareTitle}>
-                <TwitterIcon size={40} round />
-              </TwitterShareButton>
+              <Card className={cn("border", resultInfo.borderColor)}>
+                <CardHeader className="p-4">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    Time
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-2xl font-bold">
+                    {score.timeTaken ? formatTime(score.timeTaken) : "N/A"}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Total time taken
+                  </p>
+                </CardContent>
+              </Card>
 
-              <WhatsappShareButton url={shareUrl} title={shareTitle}>
-                <WhatsappIcon size={40} round />
-              </WhatsappShareButton>
+              <Card className={cn("border", resultInfo.borderColor)}>
+                <CardHeader className="p-4">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Trophy className="w-4 h-4" />
+                    Rank
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-2xl font-bold">
+                    {percentage >= 90 ? "Expert" :
+                     percentage >= 70 ? "Advanced" :
+                     percentage >= 50 ? "Intermediate" : "Beginner"}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Your skill level
+                  </p>
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </CardContent>
 
-        <CardFooter className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-between">
-          <Button
-            variant="outline"
-            onClick={onBackToList}
-            className="w-full sm:w-auto"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            New Puzzle
-          </Button>
-          <Button
-            className="w-full sm:w-auto bg-primary hover:bg-primary/90"
-            onClick={onPlayAgain}
-          >
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Play Again
-          </Button>
-        </CardFooter>
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <Share2 className="w-4 h-4" />
+                <h3 className="font-medium">Share your achievement</h3>
+              </div>
+              <div className="flex justify-center gap-4">
+                <FacebookShareButton url={shareUrl} quote={shareTitle}>
+                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                    <FacebookIcon size={40} round />
+                  </div>
+                </FacebookShareButton>
+
+                <TwitterShareButton url={shareUrl} title={shareTitle}>
+                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                    <TwitterIcon size={40} round />
+                  </div>
+                </TwitterShareButton>
+
+                <WhatsappShareButton url={shareUrl} title={shareTitle}>
+                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                    <WhatsappIcon size={40} round />
+                  </div>
+                </WhatsappShareButton>
+              </div>
+            </div>
+          </CardContent>
+
+          <CardFooter className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-between p-6">
+            <Button
+              variant="outline"
+              onClick={onBackToList}
+              className={cn("w-full sm:w-auto border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10")}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              New Puzzle
+            </Button>
+            <Button
+              onClick={onPlayAgain}
+              className={cn("w-full sm:w-auto", resultInfo.bgColor, resultInfo.color)}
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Play Again
+            </Button>
+          </CardFooter>
+
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00e5e5] to-transparent" />
+        </div>
       </Card>
     </div>
   );
