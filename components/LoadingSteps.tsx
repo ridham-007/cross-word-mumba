@@ -1,4 +1,3 @@
-```tsx
 import { cn } from "@/lib/utils";
 import { Check, Loader2 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
@@ -72,4 +71,3 @@ export default function LoadingSteps({ steps, currentStep }: LoadingStepsProps) 
     </div>
   );
 }
-```
