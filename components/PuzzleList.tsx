@@ -32,37 +32,37 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
     switch (difficulty) {
       case 'easy':
         return {
-          color: 'from-cyan-400 to-blue-500',
-          textColor: 'text-cyan-400',
-          bgColor: 'bg-cyan-400',
-          gradientBg: 'bg-gradient-to-r from-cyan-500/10 to-blue-500/10',
+          color: 'from-green-400 to-emerald-500',
+          textColor: 'text-green-400',
+          bgColor: 'bg-green-400',
+          gradientBg: 'bg-gradient-to-r from-green-500/10 to-emerald-500/10',
           level: 'Beginner Friendly',
           description: 'Perfect for those new to crosswords'
         };
       case 'medium':
         return {
-          color: 'from-indigo-400 to-purple-500',
-          textColor: 'text-indigo-400',
-          bgColor: 'bg-indigo-400',
-          gradientBg: 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10',
+          color: 'from-emerald-400 to-teal-500',
+          textColor: 'text-emerald-400',
+          bgColor: 'bg-emerald-400',
+          gradientBg: 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10',
           level: 'Intermediate',
           description: 'Challenging but manageable'
         };
       case 'hard':
         return {
-          color: 'from-fuchsia-400 to-pink-500',
-          textColor: 'text-fuchsia-400',
-          bgColor: 'bg-fuchsia-400',
-          gradientBg: 'bg-gradient-to-r from-fuchsia-500/10 to-pink-500/10',
+          color: 'from-teal-400 to-cyan-500',
+          textColor: 'text-teal-400',
+          bgColor: 'bg-teal-400',
+          gradientBg: 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10',
           level: 'Expert',
           description: 'For seasoned puzzle solvers'
         };
       default:
         return {
-          color: 'from-teal-400 to-cyan-500',
-          textColor: 'text-teal-400',
-          bgColor: 'bg-teal-400',
-          gradientBg: 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10',
+          color: 'from-green-400 to-emerald-500',
+          textColor: 'text-green-400',
+          bgColor: 'bg-green-400',
+          gradientBg: 'bg-gradient-to-r from-green-500/10 to-emerald-500/10',
           level: 'Unknown',
           description: 'Difficulty level not specified'
         };
@@ -73,7 +73,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          <h1 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">
             Crossword Puzzles
           </h1>
           <p className="text-xl text-muted-foreground">Challenge yourself with our collection of puzzles</p>
@@ -82,7 +82,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
         <div className="flex justify-center">
           <Button
             onClick={() => setShowCreateModal(true)}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:opacity-90 transition-opacity"
+            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:opacity-90 transition-opacity"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create New Puzzle
