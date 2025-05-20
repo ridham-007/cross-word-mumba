@@ -74,13 +74,13 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
         <div className="flex items-center justify-between">
           <Button 
             onClick={onBack}
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="rounded-full hover:bg-primary/10"
+            className="rounded-full border-green-500/20 hover:bg-green-500/10"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <Badge className={`bg-gradient-to-r ${difficultyInfo.color} text-white`}>
+          <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor}`}>
             {puzzle.difficulty.toUpperCase()}
           </Badge>
         </div>
@@ -194,9 +194,10 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             How to Play
           </Button>
           <Button
+            variant="outline"
             onClick={onStart}
             size="lg"
-            className={`w-full sm:w-auto bg-gradient-to-r ${difficultyInfo.color} text-white hover:opacity-90 transition-opacity`}
+            className="w-full sm:w-auto border-green-500 text-green-500 hover:bg-green-500/10"
           >
             Start Playing
           </Button>

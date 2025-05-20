@@ -82,7 +82,8 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
         <div className="flex justify-center">
           <Button
             onClick={() => setShowCreateModal(true)}
-            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:opacity-90 transition-opacity"
+            variant="outline"
+            className="border-green-500 text-green-500 hover:bg-green-500/10"
           >
             <Plus className="mr-2 h-4 w-4" />
             Create New Puzzle
@@ -108,7 +109,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                       <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
                       <CardDescription className="text-base">{puzzle.description}</CardDescription>
                     </div>
-                    <Badge className={`bg-gradient-to-r ${difficultyInfo.color} text-white`}>
+                    <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor}`}>
                       {puzzle.difficulty.toUpperCase()}
                     </Badge>
                   </div>
@@ -146,7 +147,8 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                   </div>
 
                   <Button 
-                    className={`bg-gradient-to-r ${difficultyInfo.color} text-white hover:opacity-90 transition-opacity`}
+                    variant="outline"
+                    className={`border-green-500 ${difficultyInfo.textColor} hover:bg-green-500/10`}
                     onClick={() => handlePlayClick(puzzle.id)}
                   >
                     <Play className="mr-2 h-4 w-4" />
