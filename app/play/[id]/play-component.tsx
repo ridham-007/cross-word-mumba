@@ -53,16 +53,7 @@ export default function PlayArea() {
 
     return (
         <main className="min-h-screen bg-background">
-            <div className="container mx-auto px-4 py-8">
-                {/* <Button
-                    onClick={handleBackToList}
-                    variant="outline"
-                    size="icon"
-                    className="mb-6 rounded-full"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                </Button> */}
-
+            <div className="container mx-auto px-4 py-8 max-w-7xl">
                 {gameState === GameState.INSTRUCTIONS && (
                     <GameInstructions
                         puzzleId={puzzleId}
@@ -72,11 +63,15 @@ export default function PlayArea() {
                 )}
 
                 {gameState === GameState.PLAYING && (
-                    <CrosswordGame
-                        puzzleId={puzzleId}
-                        onSubmit={handleSubmitGame}
-                        onBack={handleBackToList}
-                    />
+                    <div className="relative">
+                        <div className="absolute -top-2 left-0 w-full h-1 bg-gradient-to-r from-[#00e5e5]/0 via-[#00e5e5] to-[#00e5e5]/0 animate-pulse" />
+                        <CrosswordGame
+                            puzzleId={puzzleId}
+                            onSubmit={handleSubmitGame}
+                            onBack={handleBackToList}
+                        />
+                        <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-[#00e5e5]/0 via-[#00e5e5] to-[#00e5e5]/0 animate-pulse" />
+                    </div>
                 )}
 
                 {gameState === GameState.RESULT && (

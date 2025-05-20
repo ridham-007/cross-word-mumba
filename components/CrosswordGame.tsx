@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { getPuzzleById } from "@/data/puzzleData";
-import { Cell, Clue, UserProgress } from "@/types/crossword";
+import { Cell, Clue } from "@/types/crossword";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check, Eraser, Eye, Keyboard, Send, Clock } from "lucide-react";
 import CrosswordGrid from "@/components/CrosswordGrid";
@@ -10,6 +10,7 @@ import CrosswordClues from "@/components/CrosswordClues";
 import CrosswordKeyboard from "@/components/CrosswordKeyboard";
 import { useToast } from "@/hooks/use-toast";
 import { formatTime } from "@/lib/utils";
+import { Card } from "./ui/card";
 
 interface CrosswordGameProps {
   puzzleId: string;
@@ -472,18 +473,18 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <Button
           onClick={onBack}
           variant="outline"
           size="icon"
-          className="rounded-full"
+          className="rounded-full border-[#00e5e5] hover:bg-[#00e5e5]/10"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 text-[#00e5e5]" />
         </Button>
         <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-bold">{puzzle.title}</h1>
+          <h1 className="text-2xl font-bold text-[#00e5e5]">{puzzle.title}</h1>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="h-4 w-4" />
             <span>{formatTime(elapsedTime)}</span>
@@ -492,65 +493,67 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full"
+          className="rounded-full border-[#00e5e5] hover:bg-[#00e5e5]/10"
           onClick={() => setIsKeyboardVisible(!isKeyboardVisible)}
         >
-          <Keyboard className="h-4 w-4" />
+          <Keyboard className="h-4 w-4 text-[#00e5e5]" />
         </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <CrosswordGrid
-            grid={userProgress.userGrid}
-            selectedCell={userProgress.selectedCell}
-            selectedDirection={userProgress.selectedDirection}
-            checkedCells={userProgress.checkedCells}
-            onCellSelect={handleCellSelect}
-          />
+        <Card className="lg:col-span-2 p-6 border-[#00e5e5]/20 bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="relative">
+            <CrosswordGrid
+              grid={userProgress.userGrid}
+              selectedCell={userProgress.selectedCell}
+              selectedDirection={userProgress.selectedDirection}
+              checkedCells={userProgress.checkedCells}
+              onCellSelect={handleCellSelect}
+            />
 
-          <div className="mt-6 flex flex-wrap gap-3 justify-center">
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500"
-              onClick={handleCheck}
-            >
-              <Check className="h-4 w-4" />
-              Check
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-500"
-              onClick={handleReveal}
-            >
-              <Eye className="h-4 w-4" />
-              Reveal All
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500"
-              onClick={handleClear}
-            >
-              <Eraser className="h-4 w-4" />
-              Clear
-            </Button>
-            <Button
-              className="bg-green-500 hover:bg-green-600 flex items-center gap-2"
-              onClick={handleSubmit}
-            >
-              <Send className="h-4 w-4" />
-              Submit
-            </Button>
-          </div>
-
-          {isKeyboardVisible && (
-            <div className="mt-4">
-              <CrosswordKeyboard onKeyPress={handleInput} onBackspace={handleBackspace} />
+            <div className="mt-6 flex flex-wrap gap-3 justify-center">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border-blue-500"
+                onClick={handleCheck}
+              >
+                <Check className="h-4 w-4" />
+                Check
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-500 border-purple-500"
+                onClick={handleReveal}
+              >
+                <Eye className="h-4 w-4" />
+                Reveal All
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 border-red-500"
+                onClick={handleClear}
+              >
+                <Eraser className="h-4 w-4" />
+                Clear
+              </Button>
+              <Button
+                className="bg-[#00e5e5] hover:bg-[#00e5e5]/90 flex items-center gap-2"
+                onClick={handleSubmit}
+              >
+                <Send className="h-4 w-4" />
+                Submit
+              </Button>
             </div>
-          )}
-        </div>
 
-        <div className="lg:col-span-1">
+            {isKeyboardVisible && (
+              <div className="mt-6">
+                <CrosswordKeyboard onKeyPress={handleInput} onBackspace={handleBackspace} />
+              </div>
+            )}
+          </div>
+        </Card>
+
+        <Card className="lg:col-span-1 border-[#00e5e5]/20 bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <CrosswordClues
             clues={puzzle.clues}
             selectedCell={userProgress.selectedCell}
@@ -558,7 +561,7 @@ export default function CrosswordGame({ puzzleId, onSubmit, onBack }: CrosswordG
             grid={userProgress.userGrid}
             onClueSelect={handleClueSelect}
           />
-        </div>
+        </Card>
       </div>
     </div>
   );
