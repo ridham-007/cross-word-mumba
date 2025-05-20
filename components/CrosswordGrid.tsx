@@ -26,19 +26,19 @@ export default function CrosswordGrid({
     
     // Cell coloring
     if (cell.isBlack) {
-      styles += " bg-gray-900 border-gray-800";
+      styles += " bg-background border-border/50";
     } else if (isSelected) {
-      styles += " bg-blue-500/20 border-blue-500";
+      styles += " bg-[#00e5e5]/10 border-[#00e5e5]";
     } else if (cell.isHighlighted) {
-      styles += " bg-blue-500/10 border-blue-400/50";
+      styles += " bg-[#00e5e5]/5 border-[#00e5e5]/50";
     } else {
-      styles += " bg-card border-border hover:bg-muted/70";
+      styles += " bg-card/50 border-border hover:bg-[#00e5e5]/5";
     }
     
     // Cell validation
     if (checkedCells[cell.row][cell.col]) {
       if (cell.isCorrect) {
-        styles += " border-green-500 bg-green-500/10";
+        styles += " border-emerald-500 bg-emerald-500/10";
       } else if (cell.isCorrect === false) {
         styles += " border-red-500 bg-red-500/10";
       }
@@ -50,7 +50,7 @@ export default function CrosswordGrid({
   return (
     <div className="relative overflow-auto">
       <div 
-        className="grid gap-px bg-border"
+        className="grid gap-px bg-border/10 rounded-lg p-2 backdrop-blur-sm"
         style={{ 
           gridTemplateRows: `repeat(${grid.length}, minmax(40px, 1fr))`,
           gridTemplateColumns: `repeat(${grid[0].length}, minmax(40px, 1fr))`,
@@ -66,7 +66,7 @@ export default function CrosswordGrid({
                 key={`${rowIndex}-${colIndex}`}
                 className={cn(
                   getCellStyle(cell, isSelected),
-                  "aspect-square cursor-pointer"
+                  "aspect-square cursor-pointer rounded-sm"
                 )}
                 onClick={() => !cell.isBlack && onCellSelect(rowIndex, colIndex)}
               >
@@ -88,7 +88,7 @@ export default function CrosswordGrid({
                     {/* Selected direction indicator */}
                     {isSelected && (
                       <div className={cn(
-                        "absolute h-1.5 w-1.5 bg-blue-500 rounded-full",
+                        "absolute h-1.5 w-1.5 bg-[#00e5e5] rounded-full",
                         selectedDirection === 'across' ? "top-1.5 right-1.5" : "bottom-1.5 right-1.5"
                       )} />
                     )}
