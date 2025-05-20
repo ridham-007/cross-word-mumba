@@ -29,37 +29,33 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
     switch (difficulty) {
       case 'easy':
         return {
-          color: 'from-green-400 to-emerald-500',
-          textColor: 'text-green-500',
-          bgColor: 'bg-green-500',
-          gradientBg: 'bg-gradient-to-r from-green-500/10 to-emerald-500/10',
-          level: 'Beginner Friendly',
+          color: 'bg-emerald-500',
+          textColor: 'text-emerald-500',
+          borderColor: 'border-emerald-500',
+          level: 'Beginner',
           description: 'Perfect for those new to crosswords'
         };
       case 'medium':
         return {
-          color: 'from-emerald-400 to-teal-500',
-          textColor: 'text-emerald-500',
-          bgColor: 'bg-emerald-500',
-          gradientBg: 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10',
+          color: 'bg-amber-500',
+          textColor: 'text-amber-500',
+          borderColor: 'border-amber-500',
           level: 'Intermediate',
           description: 'Challenging but manageable'
         };
       case 'hard':
         return {
-          color: 'from-teal-400 to-cyan-500',
-          textColor: 'text-teal-500',
-          bgColor: 'bg-teal-500',
-          gradientBg: 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10',
+          color: 'bg-rose-500',
+          textColor: 'text-rose-500',
+          borderColor: 'border-rose-500',
           level: 'Expert',
           description: 'For seasoned puzzle solvers'
         };
       default:
         return {
-          color: 'from-green-400 to-emerald-500',
-          textColor: 'text-green-500',
-          bgColor: 'bg-green-500',
-          gradientBg: 'bg-gradient-to-r from-green-500/10 to-emerald-500/10',
+          color: 'bg-emerald-500',
+          textColor: 'text-emerald-500',
+          borderColor: 'border-emerald-500',
           level: 'Unknown',
           description: 'Difficulty level not specified'
         };
@@ -76,25 +72,25 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             onClick={onBack}
             variant="outline"
             size="icon"
-            className="rounded-full border-green-500/20 hover:bg-green-500/10"
+            className="rounded-full border-[#00e5e5] hover:bg-[#00e5e5]/10"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <Badge variant="outline" className={`border-green-500 ${difficultyInfo.textColor}`}>
+          <Badge variant="outline" className={`${difficultyInfo.borderColor} ${difficultyInfo.textColor}`}>
             {puzzle.difficulty.toUpperCase()}
           </Badge>
         </div>
 
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-500">{puzzle.title}</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-[#00e5e5]">{puzzle.title}</h1>
           <p className="text-xl text-muted-foreground">{puzzle.description}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className={`${difficultyInfo.gradientBg} border-none shadow-xl`}>
+          <Card className="border-[#00e5e5]/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className={`h-5 w-5 ${difficultyInfo.textColor}`} />
+              <CardTitle className="flex items-center gap-2 text-[#00e5e5]">
+                <Brain className="h-5 w-5" />
                 Puzzle Overview
               </CardTitle>
             </CardHeader>
@@ -108,9 +104,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
               </div>
 
               <div className="grid gap-4">
-                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Clock className={difficultyInfo.textColor} />
+                    <Clock className="text-[#00e5e5]" />
                     <span>Estimated Time</span>
                   </div>
                   <span className="font-medium">
@@ -120,9 +116,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Trophy className={difficultyInfo.textColor} />
+                    <Trophy className="text-[#00e5e5]" />
                     <span>Total Clues</span>
                   </div>
                   <span className="font-medium">
@@ -130,9 +126,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Target className={difficultyInfo.textColor} />
+                    <Target className="text-[#00e5e5]" />
                     <span>Grid Size</span>
                   </div>
                   <span className="font-medium">
@@ -143,17 +139,17 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500/5 via-emerald-500/10 to-green-500/5 border-none shadow-xl">
+          <Card className="border-[#00e5e5]/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-green-500" />
+              <CardTitle className="flex items-center gap-2 text-[#00e5e5]">
+                <Zap className="h-5 w-5" />
                 Quick Tips
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                <div className="rounded-full bg-green-500/20 p-2">
-                  <PenTool className="h-4 w-4 text-green-500" />
+              <div className="flex items-start gap-3 p-3 border rounded-lg">
+                <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                  <PenTool className="h-4 w-4 text-[#00e5e5]" />
                 </div>
                 <div>
                   <h4 className="font-medium">Fill Strategy</h4>
@@ -161,9 +157,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                <div className="rounded-full bg-green-500/20 p-2">
-                  <Check className="h-4 w-4 text-green-500" />
+              <div className="flex items-start gap-3 p-3 border rounded-lg">
+                <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                  <Check className="h-4 w-4 text-[#00e5e5]" />
                 </div>
                 <div>
                   <h4 className="font-medium">Use the Check Feature</h4>
@@ -171,9 +167,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                <div className="rounded-full bg-green-500/20 p-2">
-                  <Target className="h-4 w-4 text-green-500" />
+              <div className="flex items-start gap-3 p-3 border rounded-lg">
+                <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                  <Target className="h-4 w-4 text-[#00e5e5]" />
                 </div>
                 <div>
                   <h4 className="font-medium">Navigate Efficiently</h4>
@@ -188,7 +184,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           <Button
             variant="outline"
             onClick={() => setShowInstructions(true)}
-            className="w-full sm:w-auto border-green-500/20 hover:bg-green-500/10"
+            className="w-full sm:w-auto border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
           >
             <HelpCircle className="mr-2 h-4 w-4" />
             How to Play
@@ -196,8 +192,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
           <Button
             variant="outline"
             onClick={onStart}
-            size="lg"
-            className="w-full sm:w-auto border-green-500 text-green-500 hover:bg-green-500/10"
+            className="w-full sm:w-auto border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
           >
             Start Playing
           </Button>
@@ -206,7 +201,7 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
         <Dialog open={showInstructions} onOpenChange={setShowInstructions}>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
-              <DialogTitle>How to Play</DialogTitle>
+              <DialogTitle className="text-[#00e5e5]">How to Play</DialogTitle>
               <DialogDescription>
                 Master the crossword puzzle with these simple instructions
               </DialogDescription>
@@ -214,11 +209,11 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
             
             <div className="grid gap-6 py-4">
               <div className="space-y-4">
-                <h3 className="font-semibold">Basic Controls</h3>
+                <h3 className="font-semibold text-[#00e5e5]">Basic Controls</h3>
                 <div className="grid gap-4 text-sm">
-                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                    <div className="rounded-full bg-green-500/20 p-2">
-                      <Target className="h-4 w-4 text-green-500" />
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                      <Target className="h-4 w-4 text-[#00e5e5]" />
                     </div>
                     <div>
                       <p className="font-medium">Navigation</p>
@@ -226,9 +221,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                    <div className="rounded-full bg-green-500/20 p-2">
-                      <PenTool className="h-4 w-4 text-green-500" />
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                      <PenTool className="h-4 w-4 text-[#00e5e5]" />
                     </div>
                     <div>
                       <p className="font-medium">Entering Answers</p>
@@ -236,9 +231,9 @@ export default function GameInstructions({ puzzleId, onStart, onBack }: GameInst
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 rounded-lg bg-white/5 backdrop-blur-sm p-3 border border-white/10">
-                    <div className="rounded-full bg-green-500/20 p-2">
-                      <Check className="h-4 w-4 text-green-500" />
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="rounded-full bg-[#00e5e5]/10 p-2">
+                      <Check className="h-4 w-4 text-[#00e5e5]" />
                     </div>
                     <div>
                       <p className="font-medium">Checking Progress</p>
