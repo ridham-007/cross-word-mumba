@@ -38,7 +38,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h1 className="text-4xl font-bold text-primary">Crossword Puzzle</h1>
         <p className="text-xl text-muted-foreground">Choose a puzzle and challenge yourself!</p>
@@ -54,59 +54,61 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-4">
         {puzzleList.map((puzzle) => (
           <Card
             key={puzzle.id}
             className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-              hoveredPuzzle === puzzle.id ? 'scale-[1.02]' : 'scale-100'
+              hoveredPuzzle === puzzle.id ? 'scale-[1.01]' : 'scale-100'
             } cursor-pointer border-border bg-card`}
             onMouseEnter={() => setHoveredPuzzle(puzzle.id)}
             onMouseLeave={() => setHoveredPuzzle(null)}
             onClick={() => handlePlayClick(puzzle.id)}
           >
-            <CardHeader className="pb-4">
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-xl font-bold">{puzzle.title}</CardTitle>
-                <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
-                  {puzzle.difficulty}
-                </Badge>
-              </div>
-              <CardDescription className="text-muted-foreground">
-                {puzzle.description}
-              </CardDescription>
-            </CardHeader>
+            <div className="flex flex-col md:flex-row md:items-center">
+              <div className="flex-1 p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <CardTitle className="text-2xl font-bold mb-2">{puzzle.title}</CardTitle>
+                    <CardDescription className="text-muted-foreground text-base">
+                      {puzzle.description}
+                    </CardDescription>
+                  </div>
+                  <Badge className={`${getDifficultyColor(puzzle.difficulty)} transition-colors`}>
+                    {puzzle.difficulty}
+                  </Badge>
+                </div>
 
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <FileText className="h-4 w-4" />
-                  <span>{puzzle.clues.across.length + puzzle.clues.down.length} clues</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar className="h-4 w-4" />
-                  <span>~{puzzle.difficulty === 'easy' ? 5 : puzzle.difficulty === 'medium' ? 10 : 15} mins</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Users className="h-4 w-4" />
-                  <span>
-                    {puzzle.difficulty === 'easy' ? 'Beginner' : 
-                     puzzle.difficulty === 'medium' ? 'Intermediate' : 
-                     'Expert'}
-                  </span>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <FileText className="h-4 w-4" />
+                    <span>{puzzle.clues.across.length + puzzle.clues.down.length} clues</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span>~{puzzle.difficulty === 'easy' ? 5 : puzzle.difficulty === 'medium' ? 10 : 15} mins</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Users className="h-4 w-4" />
+                    <span>
+                      {puzzle.difficulty === 'easy' ? 'Beginner' : 
+                       puzzle.difficulty === 'medium' ? 'Intermediate' : 
+                       'Expert'}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </CardContent>
 
-            <CardFooter className="pt-4">
-              <Button 
-                className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
-                onClick={() => handlePlayClick(puzzle.id)}
-              >
-                <Play className="mr-2 h-4 w-4" />
-                Start Challenge
-              </Button>
-            </CardFooter>
+              <div className="p-6 md:pl-0 md:pr-6 flex items-center">
+                <Button 
+                  className="w-full md:w-auto bg-primary/10 hover:bg-primary/20 text-primary"
+                  onClick={() => handlePlayClick(puzzle.id)}
+                >
+                  <Play className="mr-2 h-4 w-4" />
+                  Start Challenge
+                </Button>
+              </div>
+            </div>
 
             <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-background/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
           </Card>
