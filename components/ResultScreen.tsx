@@ -44,9 +44,11 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
         icon: Trophy,
         message: "Perfect Score!",
         description: "Absolutely brilliant! You're a crossword master!",
-        color: "text-yellow-500",
-        bgColor: "bg-yellow-500/10",
-        borderColor: "border-yellow-500"
+        color: "text-amber-400",
+        bgColor: "bg-amber-400/10",
+        borderColor: "border-amber-400",
+        gradientFrom: "from-amber-400",
+        gradientTo: "to-amber-600"
       };
     } else if (percentage >= 80) {
       return {
@@ -54,9 +56,11 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
         icon: Star,
         message: "Amazing Job!",
         description: "Outstanding performance! Keep up the great work!",
-        color: "text-[#00e5e5]",
-        bgColor: "bg-[#00e5e5]/10",
-        borderColor: "border-[#00e5e5]"
+        color: "text-emerald-400",
+        bgColor: "bg-emerald-400/10",
+        borderColor: "border-emerald-400",
+        gradientFrom: "from-emerald-400",
+        gradientTo: "to-emerald-600"
       };
     } else if (percentage >= 60) {
       return {
@@ -64,9 +68,11 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
         icon: Target,
         message: "Well Done!",
         description: "Good effort! You're making great progress!",
-        color: "text-purple-500",
-        bgColor: "bg-purple-500/10",
-        borderColor: "border-purple-500"
+        color: "text-blue-400",
+        bgColor: "bg-blue-400/10",
+        borderColor: "border-blue-400",
+        gradientFrom: "from-blue-400",
+        gradientTo: "to-blue-600"
       };
     } else {
       return {
@@ -74,9 +80,11 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
         icon: Target,
         message: "Keep Going!",
         description: "Practice makes perfect! Try again and improve your score!",
-        color: "text-blue-500",
-        bgColor: "bg-blue-500/10",
-        borderColor: "border-blue-500"
+        color: "text-purple-400",
+        bgColor: "bg-purple-400/10",
+        borderColor: "border-purple-400",
+        gradientFrom: "from-purple-400",
+        gradientTo: "to-purple-600"
       };
     }
   };
@@ -91,13 +99,13 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
     <div className="flex flex-col items-center justify-center min-h-[80vh] p-4">
       {showConfetti && percentage >= 60 && <Confetti />}
 
-      <Card className="w-full max-w-2xl border-[#00e5e5]/20 bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00e5e5] to-transparent" />
+      <Card className="w-full max-w-2xl border-none bg-gradient-to-br from-background to-background/80 shadow-2xl backdrop-blur-lg">
+        <div className="relative overflow-hidden rounded-lg">
+          <div className={cn("absolute top-0 left-0 w-full h-1 bg-gradient-to-r", resultInfo.gradientFrom, resultInfo.gradientTo)} />
 
           <CardHeader className="text-center pb-2 pt-8">
             <div className="mx-auto mb-6 relative">
-              <div className={cn("w-20 h-20 rounded-full flex items-center justify-center", resultInfo.bgColor)}>
+              <div className={cn("w-20 h-20 rounded-full flex items-center justify-center backdrop-blur-xl", resultInfo.bgColor)}>
                 <Icon className={cn("w-10 h-10", resultInfo.color)} />
               </div>
               <div className="absolute -right-2 -top-2 text-4xl animate-bounce">
@@ -114,30 +122,30 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
 
           <CardContent className="space-y-8 pt-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className={cn("border", resultInfo.borderColor)}>
+              <Card className={cn("border bg-gradient-to-br from-background/50 to-background backdrop-blur-lg", resultInfo.borderColor)}>
                 <CardHeader className="p-4">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Target className="w-4 h-4" />
+                    <Target className={resultInfo.color} />
                     Accuracy
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <div className="text-2xl font-bold">{percentage}%</div>
+                  <div className={cn("text-2xl font-bold", resultInfo.color)}>{percentage}%</div>
                   <p className="text-sm text-muted-foreground">
                     {score.correct} of {score.total} correct
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className={cn("border", resultInfo.borderColor)}>
+              <Card className={cn("border bg-gradient-to-br from-background/50 to-background backdrop-blur-lg", resultInfo.borderColor)}>
                 <CardHeader className="p-4">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
+                    <Clock className={resultInfo.color} />
                     Time
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <div className="text-2xl font-bold">
+                  <div className={cn("text-2xl font-bold", resultInfo.color)}>
                     {score.timeTaken ? formatTime(score.timeTaken) : "N/A"}
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -146,15 +154,15 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
                 </CardContent>
               </Card>
 
-              <Card className={cn("border", resultInfo.borderColor)}>
+              <Card className={cn("border bg-gradient-to-br from-background/50 to-background backdrop-blur-lg", resultInfo.borderColor)}>
                 <CardHeader className="p-4">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Trophy className="w-4 h-4" />
+                    <Trophy className={resultInfo.color} />
                     Rank
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <div className="text-2xl font-bold">
+                  <div className={cn("text-2xl font-bold", resultInfo.color)}>
                     {percentage >= 90 ? "Expert" :
                       percentage >= 70 ? "Advanced" :
                         percentage >= 50 ? "Intermediate" : "Beginner"}
@@ -173,19 +181,19 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
               </div>
               <div className="flex justify-center gap-4">
                 <FacebookShareButton url={shareUrl} title={shareTitle}>
-                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                  <div className={cn("p-2 rounded-full transition-colors hover:opacity-90", resultInfo.bgColor)}>
                     <FacebookIcon size={40} round />
                   </div>
                 </FacebookShareButton>
 
                 <TwitterShareButton url={shareUrl} title={shareTitle}>
-                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                  <div className={cn("p-2 rounded-full transition-colors hover:opacity-90", resultInfo.bgColor)}>
                     <TwitterIcon size={40} round />
                   </div>
                 </TwitterShareButton>
 
                 <WhatsappShareButton url={shareUrl} title={shareTitle}>
-                  <div className={cn("p-2 rounded-full transition-colors", resultInfo.bgColor)}>
+                  <div className={cn("p-2 rounded-full transition-colors hover:opacity-90", resultInfo.bgColor)}>
                     <WhatsappIcon size={40} round />
                   </div>
                 </WhatsappShareButton>
@@ -197,21 +205,21 @@ export default function ResultScreen({ score, onPlayAgain, onBackToList }: Resul
             <Button
               variant="outline"
               onClick={onBackToList}
-              className={cn("w-full sm:w-auto border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10")}
+              className={cn("w-full sm:w-auto border-2 bg-background/50 backdrop-blur-lg hover:bg-background/80", resultInfo.borderColor, resultInfo.color)}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               New Puzzle
             </Button>
             <Button
               onClick={onPlayAgain}
-              className={cn("w-full sm:w-auto", resultInfo.bgColor, resultInfo.color)}
+              className={cn("w-full sm:w-auto text-white", `bg-gradient-to-r ${resultInfo.gradientFrom} ${resultInfo.gradientTo} hover:opacity-90`)}
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Play Again
             </Button>
           </CardFooter>
 
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00e5e5] to-transparent" />
+          <div className={cn("absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r", resultInfo.gradientFrom, resultInfo.gradientTo)} />
         </div>
       </Card>
     </div>
