@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { puzzles, createPuzzle } from "@/data/puzzleData";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Calendar, Users, FileText, Plus, Brain, Trophy, Target, Clock } from "lucide-react";
 import CreatePuzzleModal from "./CreatePuzzleModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface PuzzleListProps {
   onSelectPuzzle: (puzzleId: string) => void;
@@ -32,30 +31,30 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
     switch (difficulty) {
       case 'easy':
         return {
-          color: 'bg-emerald-500',
-          textColor: 'text-emerald-500',
-          borderColor: 'border-emerald-500',
+          color: 'bg-[#00e5e5]',
+          textColor: 'text-[#00e5e5]',
+          borderColor: 'border-[#00e5e5]',
           level: 'Beginner'
         };
       case 'medium':
         return {
-          color: 'bg-amber-500',
-          textColor: 'text-amber-500',
-          borderColor: 'border-amber-500',
+          color: 'bg-[#00e5e5]',
+          textColor: 'text-[#00e5e5]',
+          borderColor: 'border-[#00e5e5]',
           level: 'Intermediate'
         };
       case 'hard':
         return {
-          color: 'bg-rose-500',
-          textColor: 'text-rose-500',
-          borderColor: 'border-rose-500',
+          color: 'bg-[#00e5e5]',
+          textColor: 'text-[#00e5e5]',
+          borderColor: 'border-[#00e5e5]',
           level: 'Expert'
         };
       default:
         return {
-          color: 'bg-emerald-500',
-          textColor: 'text-emerald-500',
-          borderColor: 'border-emerald-500',
+          color: 'bg-[#00e5e5]',
+          textColor: 'text-[#00e5e5]',
+          borderColor: 'border-[#00e5e5]',
           level: 'Unknown'
         };
     }
@@ -71,7 +70,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
           <p className="text-xl text-muted-foreground">Challenge yourself with our collection of puzzles</p>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
           <Button
             onClick={() => setShowCreateModal(true)}
             variant="outline"
@@ -80,6 +79,15 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
             <Plus className="mr-2 h-4 w-4" />
             Create New Puzzle
           </Button>
+          <Link href="/leaderboard">
+            <Button
+              variant="outline"
+              className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
+            >
+              <Trophy className="mr-2 h-4 w-4" />
+              Leaderboard
+            </Button>
+          </Link>
         </div>
 
         <div className="space-y-6">
@@ -145,14 +153,25 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                     </div>
                   </div>
 
-                  <Button 
-                    variant="outline"
-                    className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
-                    onClick={() => handlePlayClick(puzzle.id)}
-                  >
-                    <Play className="mr-2 h-4 w-4" />
-                    Start Challenge
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline"
+                      className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
+                      onClick={() => handlePlayClick(puzzle.id)}
+                    >
+                      <Play className="mr-2 h-4 w-4" />
+                      Start Challenge
+                    </Button>
+                    <Link href={`/leaderboard?puzzleId=${puzzle.id}`}>
+                      <Button
+                        variant="outline"
+                        className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
+                      >
+                        <Trophy className="mr-2 h-4 w-4" />
+                        View Rankings
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </Card>
             );
