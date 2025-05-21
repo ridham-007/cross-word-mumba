@@ -13,8 +13,7 @@ import {
   WhatsappIcon
 } from 'react-share';
 import Confetti from "@/components/Confetti";
-import { formatTime, cn } from "@/lib/utils";
-
+import { formatTime } from "@/lib/utils";
 interface ResultScreenProps {
   score: {
     correct: number;

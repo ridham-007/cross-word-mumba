@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Clock, Target, Medal } from "lucide-react";
+import { Trophy, Clock, Target } from "lucide-react";
 import { formatTime } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
