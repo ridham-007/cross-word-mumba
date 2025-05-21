@@ -21,14 +21,14 @@ export default function PlayArea() {
     const puzzle = getPuzzleById(puzzleId);
 
     const [gameState, setGameState] = useState<GameState>(GameState.INSTRUCTIONS);
-    const [score, setScore] = useState({ correct: 0, total: 0 });
+    const [score, setScore] = useState({ correct: 0, total: 0, timeTaken: 0 });
 
     const handleStartGame = () => {
         setGameState(GameState.PLAYING);
     };
 
-    const handleSubmitGame = (correct: number, total: number) => {
-        setScore({ correct, total });
+    const handleSubmitGame = (correct: number, total: number, timeTaken: number) => {
+        setScore({ correct, total, timeTaken });
         setGameState(GameState.RESULT);
     };
 

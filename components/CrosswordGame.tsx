@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback } from "react";
 import { getPuzzleById } from "@/data/puzzleData";
 import { Cell, Clue } from "@/types/crossword";
