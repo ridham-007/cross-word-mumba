@@ -26,11 +26,9 @@ export default function Leaderboard({ entries, puzzleId }: LeaderboardProps) {
   const filteredEntries = entries
     .filter(entry => !puzzleId || entry.puzzleId === puzzleId)
     .sort((a, b) => {
-      // First sort by score
       if (b.score !== a.score) {
         return b.score - a.score;
       }
-      // If scores are equal, sort by time (faster time wins)
       return a.timeTaken - b.timeTaken;
     })
     .slice(0, 10)
@@ -65,13 +63,13 @@ export default function Leaderboard({ entries, puzzleId }: LeaderboardProps) {
   return (
     <Card className="border-[#00e5e5]/20">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold flex items-center gap-2 text-[#00e5e5]">
-            <Trophy className="h-6 w-6" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <CardTitle className="text-xl sm:text-2xl font-bold flex items-center gap-2 text-[#00e5e5]">
+            <Trophy className="h-5 w-5 sm:h-6 sm:w-6" />
             Leaderboard
           </CardTitle>
-          <Tabs defaultValue={timeframe} className="w-[400px]">
-            <TabsList className="grid w-full grid-cols-4">
+          <Tabs defaultValue={timeframe} className="w-full sm:w-[400px]">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
               <TabsTrigger value="all" onClick={() => setTimeframe("all")}>All Time</TabsTrigger>
               <TabsTrigger value="daily" onClick={() => setTimeframe("daily")}>Daily</TabsTrigger>
               <TabsTrigger value="weekly" onClick={() => setTimeframe("weekly")}>Weekly</TabsTrigger>
@@ -85,13 +83,13 @@ export default function Leaderboard({ entries, puzzleId }: LeaderboardProps) {
           {filteredEntries.map((entry) => (
             <div
               key={entry.id}
-              className="flex items-center gap-4 p-4 rounded-lg border border-[#00e5e5]/10 bg-[#00e5e5]/5 hover:bg-[#00e5e5]/10 transition-colors"
+              className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-lg border border-[#00e5e5]/10 bg-[#00e5e5]/5 hover:bg-[#00e5e5]/10 transition-colors"
             >
-              <div className={`text-2xl font-bold ${getRankColor(entry.rank!)}`}>
+              <div className={`text-xl sm:text-2xl font-bold ${getRankColor(entry.rank!)} text-center sm:text-left`}>
                 #{entry.rank}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
+              <div className="flex-1 text-center sm:text-left">
+                <div className="flex items-center justify-center sm:justify-start gap-2">
                   <span className="font-semibold">{entry.playerName}</span>
                   <span className="text-2xl">{getRankEmoji(entry.rank!)}</span>
                 </div>
@@ -99,7 +97,7 @@ export default function Leaderboard({ entries, puzzleId }: LeaderboardProps) {
                   {new Date(entry.date).toLocaleDateString()}
                 </div>
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <Target className="h-4 w-4 text-[#00e5e5]" />
                   <span className="font-medium">{entry.score}%</span>
