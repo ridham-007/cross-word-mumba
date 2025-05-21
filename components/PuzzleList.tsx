@@ -153,25 +153,14 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
-                    <Button 
-                      variant="outline"
-                      className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
-                      onClick={() => handlePlayClick(puzzle.id)}
-                    >
-                      <Play className="mr-2 h-4 w-4" />
-                      Start Challenge
-                    </Button>
-                    <Link href={`/leaderboard?puzzleId=${puzzle.id}`}>
-                      <Button
-                        variant="outline"
-                        className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
-                      >
-                        <Trophy className="mr-2 h-4 w-4" />
-                        View Rankings
-                      </Button>
-                    </Link>
-                  </div>
+                  <Button 
+                    variant="outline"
+                    className="w-full border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
+                    onClick={() => handlePlayClick(puzzle.id)}
+                  >
+                    <Play className="mr-2 h-4 w-4" />
+                    Start Challenge
+                  </Button>
                 </div>
               </Card>
             );
