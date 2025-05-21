@@ -155,7 +155,7 @@ export default function PuzzleList({ onSelectPuzzle }: PuzzleListProps) {
 
                   <Button 
                     variant="outline"
-                    className="w-full border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
+                    className="border-[#00e5e5] text-[#00e5e5] hover:bg-[#00e5e5]/10"
                     onClick={() => handlePlayClick(puzzle.id)}
                   >
                     <Play className="mr-2 h-4 w-4" />
